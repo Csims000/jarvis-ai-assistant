@@ -1,0 +1,581 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>J.A.R.V.I.S. | Personal AI</title>
+<style>
+:root {
+  --cyan: #25dfff;
+  --blue: #168cff;
+  --orange: #ffad45;
+  --bg: #030914;
+  --panel: rgba(4, 19, 36, .91);
+  --line: rgba(37, 223, 255, .38);
+  --muted: #7aa8c9;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: #d9f6ff;
+  background:
+    radial-gradient(ellipse at 48% 35%, #082c4c 0, transparent 48%),
+    linear-gradient(135deg, #020711, #061525 55%, #02050d);
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+}
+button, input { font: inherit; }
+button {
+  color: var(--cyan);
+  background: #071b2e;
+  border: 1px solid var(--line);
+  padding: 10px 13px;
+  cursor: pointer;
+  transition: .2s;
+}
+button:hover {
+  background: #103550;
+  box-shadow: 0 0 15px #12bce955;
+}
+input {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  color: white;
+  background: #030b16;
+  border: 1px solid var(--line);
+  outline: none;
+}
+input:focus { border-color: var(--cyan); }
+.topbar {
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 15px 24px;
+  border-bottom: 1px solid var(--cyan);
+  background: #030a15eF;
+  box-shadow: 0 4px 25px #00bfff18;
+  flex-wrap: wrap;
+}
+.brand {
+  color: #e4fbff;
+  font-family: Arial, sans-serif;
+  font-size: clamp(25px, 3vw, 40px);
+  letter-spacing: 5px;
+  text-shadow: 0 0 17px #16bfff;
+}
+.subtitle {
+  color: var(--cyan);
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin-top: 6px;
+}
+.topinfo { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+.online { color: #49ffd2; }
+.layout {
+  display: grid;
+  grid-template-columns: 205px minmax(0, 1fr) 310px;
+  gap: 12px;
+  padding: 14px;
+  max-width: 1800px;
+  margin: auto;
+}
+.panel {
+  position: relative;
+  min-width: 0;
+  padding: 16px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: inset 0 0 24px #0873a510, 0 0 16px #008bff0c;
+  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px,
+    100% 100%, 15px 100%, 0 calc(100% - 15px));
+}
+.heading {
+  color: var(--cyan);
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin: 0 0 15px;
+}
+.sidebar { display: flex; flex-direction: column; gap: 12px; }
+.navbtn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 6px;
+  border-color: transparent;
+  background: transparent;
+}
+.navbtn.active, .navbtn:hover {
+  border-color: var(--cyan);
+  background: #0a2b42;
+}
+.profile { text-align: center; margin-top: 14px; }
+.avatar {
+  width: 76px; height: 76px; border-radius: 50%;
+  margin: 10px auto;
+  display: grid; place-items: center;
+  overflow: hidden;
+  border: 2px solid var(--cyan);
+  box-shadow: 0 0 20px #00cfff66;
+  font-size: 30px;
+  background: radial-gradient(circle, #155779, #061020);
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.small { font-size: 11px; color: var(--muted); line-height: 1.6; }
+.profile input { margin: 7px 0; }
+.profile button { width: 100%; margin-top: 5px; }
+.center { display: flex; flex-direction: column; gap: 12px; }
+.globe-panel {
+  min-height: 435px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    linear-gradient(#0a28431b 1px, transparent 1px),
+    linear-gradient(90deg, #0a28431b 1px, transparent 1px),
+    radial-gradient(ellipse, #07325455, #030b17 70%);
+  background-size: 25px 25px, 25px 25px, auto;
+}
+.globe {
+  width: min(70%, 310px);
+  aspect-ratio: 1;
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: 1px solid #29dfff;
+  border-radius: 50%;
+  box-shadow: 0 0 20px #0bbdff55, inset 0 0 35px #008dff35;
+  animation: breathe 4s ease-in-out infinite;
+}
+.globe::before, .globe::after {
+  content: "";
+  position: absolute;
+  inset: -17px;
+  border: 1px dashed #25dfff9c;
+  border-radius: 50%;
+  animation: spin 22s linear infinite;
+}
+.globe::after {
+  inset: 12%;
+  border: 1px solid #168cff9c;
+  animation-duration: 13s;
+  animation-direction: reverse;
+}
+.earth {
+  width: 70%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: clamp(70px, 10vw, 125px);
+  background:
+    radial-gradient(circle at 35% 30%, #63f4ff, #0875bc 43%, #02162e 75%);
+  box-shadow: 0 0 40px #0abfff, inset -15px -12px 28px #000b22;
+  filter: saturate(1.1);
+}
+.orbit {
+  position: absolute;
+  width: 125%;
+  height: 38%;
+  border: 1px solid #ffb24a;
+  border-radius: 50%;
+  transform: rotate(-25deg);
+  box-shadow: 0 0 10px #ff9c2c55;
+}
+.crosshair {
+  position: absolute;
+  inset: -30%;
+  border: 1px solid #168cff32;
+  border-radius: 50%;
+}
+.readout {
+  position: absolute;
+  color: var(--cyan);
+  font-size: 11px;
+  line-height: 1.8;
+  background: #03101ddd;
+  border: 1px solid #159acb66;
+  padding: 10px;
+}
+.readout.one { top: 12%; left: 5%; }
+.readout.two { top: 15%; right: 5%; }
+.readout.three { bottom: 10%; left: 5%; }
+.readout.four { bottom: 12%; right: 5%; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes breathe {
+  50% { box-shadow: 0 0 40px #0bbdff88, inset 0 0 45px #008dff55; }
+}
+.assistant-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid var(--line);
+  padding: 14px;
+  background: #051525;
+}
+.core {
+  flex-shrink: 0;
+  width: 45px; height: 45px;
+  border-radius: 50%;
+  border: 2px solid var(--cyan);
+  box-shadow: 0 0 18px #0bbdff;
+  display: grid; place-items: center;
+  color: var(--cyan); font-size: 21px;
+  animation: breathe 3s infinite;
+}
+.right { display: flex; flex-direction: column; gap: 12px; }
+.chat { min-height: 410px; display: flex; flex-direction: column; }
+.chatlog {
+  flex: 1;
+  min-height: 270px;
+  max-height: 430px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 5px 0 15px;
+}
+.msg {
+  padding: 12px;
+  line-height: 1.6;
+  max-width: 95%;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  border: 1px solid #159acb77;
+  background: #09213a;
+}
+.msg.user { align-self: flex-end; border-color: #9a70ff; background: #20193c; }
+.chatform { display: flex; gap: 6px; }
+.chatform button { padding: 10px; }
+.voice { width: 100%; margin-top: 9px; }
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.metric { text-align: center; }
+.gauge {
+  width: 65px; height: 65px;
+  border: 4px solid #125b83;
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  margin: 8px auto;
+  display: grid; place-items: center;
+  color: white;
+}
+.shortcuts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.shortcuts button { min-height: 60px; }
+footer { text-align: center; padding: 18px; color: #48758f; font-size: 10px; }
+#notice { color: #51ffd3; min-height: 16px; }
+@media(max-width: 1100px) {
+  .layout { grid-template-columns: 180px minmax(0, 1fr); }
+  .right { grid-column: 1 / -1; }
+  .chatlog { min-height: 200px; }
+}
+@media(max-width: 650px) {
+  .layout { grid-template-columns: 1fr; padding: 8px; }
+  .right { grid-column: auto; }
+  .topbar { padding: 15px; }
+  .topinfo { gap: 10px; }
+  .globe-panel { min-height: 380px; }
+  .readout { font-size: 9px; padding: 6px; }
+  .shortcuts { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div>
+    <div class="brand">J.A.R.V.I.S.</div>
+    <div class="subtitle">JUST A RATHER VERY INTELLIGENT SYSTEM</div>
+  </div>
+  <div class="topinfo">
+    <span class="online">● SYSTEM ONLINE</span>
+    <span id="clock">--:--:--</span>
+    <span id="date">INITIALIZING</span>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <section class="panel">
+      <h3 class="heading">NAVIGATION</h3>
+      <button class="navbtn active" data-page="Home">⌂ &nbsp; Home</button>
+      <button class="navbtn" data-page="Chat">▤ &nbsp; Chat</button>
+      <button class="navbtn" data-page="Files">▱ &nbsp; Files</button>
+      <button class="navbtn" data-page="Tasks">☑ &nbsp; Tasks</button>
+      <button class="navbtn" data-page="Settings">⚙ &nbsp; Settings</button>
+    </section>
+
+    <section class="panel profile">
+      <h3 class="heading">USER PROFILE</h3>
+      <div class="avatar" id="avatar">◈</div>
+      <div id="displayName">OPERATOR</div>
+      <p class="small">AUTHORIZED USER</p>
+      <input id="username" maxlength="30" placeholder="Your username">
+      <button onclick="saveProfile()">SAVE PROFILE</button>
+      <input id="avatarFile" type="file" accept="image/*">
+      <div id="notice" class="small"></div>
+    </section>
+
+    <section class="panel">
+      <h3 class="heading">QUICK ACTIONS</h3>
+      <button class="navbtn" onclick="voiceInput()">◉ &nbsp; Voice Input</button>
+      <button class="navbtn" onclick="showTime()">◷ &nbsp; Time Check</button>
+      <button class="navbtn" onclick="showDate()">▦ &nbsp; Date Check</button>
+      <button class="navbtn" onclick="clearChat()">⌫ &nbsp; Clear Chat</button>
+    </section>
+  </aside>
+
+  <main class="center">
+    <section class="panel globe-panel">
+      <div class="readout one">PLANETARY SCAN<br>EARTH / SOL-3<br>STATUS: STABLE</div>
+      <div class="readout two">SYSTEMS<br>ONLINE: 08<br>ALERTS: 00</div>
+      <div class="readout three">NETWORK<br>LINK: ACTIVE<br>SECURITY: DEMO</div>
+      <div class="readout four">POWER CORE<br>OUTPUT: NOMINAL<br>MODE: ASSIST</div>
+      <div class="globe">
+        <div class="crosshair"></div>
+        <div class="earth">🌐</div>
+        <div class="orbit"></div>
+      </div>
+    </section>
+
+    <section class="assistant-bar">
+      <div class="core">✦</div>
+      <div>
+        <div style="color:var(--cyan);letter-spacing:2px">J.A.R.V.I.S.</div>
+        <div id="statusLine" style="margin-top:7px">All interface systems are ready.</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h3 class="heading">SYSTEM TELEMETRY</h3>
+      <div class="metrics">
+        <div class="metric"><div class="small">PROCESSOR</div><div class="gauge" id="cpu">12%</div></div>
+        <div class="metric"><div class="small">MEMORY</div><div class="gauge" id="memory">34%</div></div>
+        <div class="metric"><div class="small">STORAGE</div><div class="gauge">58%</div></div>
+      </div>
+      <p class="small">Illustrative dashboard values, not actual hardware measurements.</p>
+    </section>
+
+    <section class="panel">
+      <h3 class="heading">MISSION CONTROL</h3>
+      <div class="shortcuts">
+        <button onclick="setMessage('Help me research a topic')">◎<br>Research</button>
+        <button onclick="setMessage('Help me organize my tasks')">☷<br>Tasks</button>
+        <button onclick="setMessage('Help me with coding')">⌘<br>Coding</button>
+        <button onclick="setMessage('Help me with homework')">▤<br>Homework</button>
+      </div>
+    </section>
+  </main>
+
+  <aside class="right">
+    <section class="panel chat">
+      <h3 class="heading">◉ &nbsp; J.A.R.V.I.S. ASSISTANT</h3>
+      <div class="chatlog" id="chatlog" aria-live="polite">
+        <div class="msg">Good day. JARVIS interface initialized. How may I assist you?</div>
+      </div>
+      <form class="chatform" id="chatform">
+        <input id="message" placeholder="Enter command..." autocomplete="off" required>
+        <button aria-label="Send message">➤</button>
+      </form>
+      <button class="voice" onclick="voiceInput()">◉ &nbsp; ACTIVATE VOICE INPUT</button>
+      <p class="small">LOCAL DEMO MODE · REAL AI NOT CONNECTED</p>
+    </section>
+
+    <section class="panel">
+      <h3 class="heading">SYSTEM LOG</h3>
+      <div id="log" class="small">[BOOT] Interface initialized.<br>[LINK] Local mode active.<br>[AI] Awaiting connection.</div>
+    </section>
+  </aside>
+</div>
+
+<footer>J.A.R.V.I.S. PERSONAL INTERFACE · HOLOGRAPHIC UI CONCEPT</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+function updateClock() {
+  const now = new Date();
+  $("clock").textContent = now.toLocaleTimeString();
+  $("date").textContent = now.toLocaleDateString();
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+function logEvent(text) {
+  $("log").innerHTML = "";
+  const line = document.createElement("div");
+  line.textContent = "[LOG] " + text;
+  $("log").appendChild(line);
+}
+
+function saveProfile() {
+  const name = $("username").value.trim();
+  if (!name) {
+    $("notice").textContent = "Enter a username first.";
+    return;
+  }
+  try {
+    localStorage.setItem("jarvisName", name);
+    $("displayName").textContent = name.toUpperCase();
+    $("notice").textContent = "Profile saved in this browser.";
+    logEvent("Profile updated.");
+  } catch {
+    $("notice").textContent = "Browser storage unavailable.";
+  }
+}
+
+function loadProfile() {
+  try {
+    const name = localStorage.getItem("jarvisName");
+    if (name) {
+      $("username").value = name;
+      $("displayName").textContent = name.toUpperCase();
+    }
+    const picture = localStorage.getItem("jarvisPicture");
+    if (picture) showPicture(picture);
+  } catch {}
+}
+
+function showPicture(src) {
+  const avatar = $("avatar");
+  avatar.textContent = "";
+  const img = document.createElement("img");
+  img.src = src;
+  img.alt = "Profile picture";
+  avatar.appendChild(img);
+}
+
+$("avatarFile").addEventListener("change", event => {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (!file.type.startsWith("image/")) {
+    $("notice").textContent = "Choose an image file.";
+    return;
+  }
+  if (file.size > 700000) {
+    $("notice").textContent = "Choose an image smaller than 700 KB.";
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      localStorage.setItem("jarvisPicture", reader.result);
+      showPicture(reader.result);
+      $("notice").textContent = "Picture saved in this browser.";
+    } catch {
+      $("notice").textContent = "Could not save this image.";
+    }
+  };
+  reader.readAsDataURL(file);
+});
+
+function addMessage(text, type = "") {
+  const node = document.createElement("div");
+  node.className = "msg " + type;
+  node.textContent = text;
+  $("chatlog").appendChild(node);
+  $("chatlog").scrollTop = $("chatlog").scrollHeight;
+}
+
+function respond(text) {
+  const q = text.toLowerCase();
+  if (q.includes("time")) return "The current time is " + new Date().toLocaleTimeString() + ".";
+  if (q.includes("date") || q.includes("day is it")) return "Today is " + new Date().toLocaleDateString() + ".";
+  if (q.includes("hello") || q.includes("hey") || q.includes("hi")) return "Hello. All interface systems are operational. What is your next instruction?";
+  if (q.includes("who are you") || q.includes("your name")) return "I am JARVIS, your personal assistant interface. My real AI connection has not been configured yet.";
+  if (q.includes("homework") || q.includes("school")) return "Certainly. Tell me the assignment, the instructions, and where you need assistance.";
+  if (q.includes("code") || q.includes("coding")) return "Coding support ready. Describe your project or paste the error you want to troubleshoot.";
+  if (q.includes("task") || q.includes("organize")) return "Let's organize your tasks. Start by listing what you need to finish and when each task is due.";
+  if (q.includes("help")) return "I can demonstrate the clock, date, profile, and local chat. Connecting a real AI model is a later step.";
+  return "Command received: \"" + text + "\". I am in local demo mode, so I cannot answer this with a real AI model yet.";
+}
+
+$("chatform").addEventListener("submit", event => {
+  event.preventDefault();
+  const text = $("message").value.trim();
+  if (!text) return;
+  addMessage(text, "user");
+  $("message").value = "";
+  $("statusLine").textContent = "Processing command...";
+  setTimeout(() => {
+    addMessage(respond(text));
+    $("statusLine").textContent = "Awaiting next instruction.";
+    logEvent("Command processed in demo mode.");
+  }, 300);
+});
+
+function setMessage(text) {
+  $("message").value = text;
+  $("message").focus();
+}
+function showTime() { addMessage("Local time: " + new Date().toLocaleTimeString()); }
+function showDate() { addMessage("Local date: " + new Date().toLocaleDateString()); }
+function clearChat() {
+  $("chatlog").replaceChildren();
+  addMessage("Chat cleared. Standing by.");
+}
+function voiceInput() {
+  const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!Recognition) {
+    addMessage("Voice input is not supported here. Please type your command.");
+    return;
+  }
+  const recognition = new Recognition();
+  recognition.lang = "en-US";
+  recognition.onresult = event => {
+    setMessage(event.results[0][0].transcript);
+  };
+  recognition.onerror = () => addMessage("Voice input failed. Check microphone permissions or type instead.");
+  recognition.start();
+}
+
+document.querySelectorAll(".navbtn[data-page]").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".navbtn[data-page]").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+    const page = button.dataset.page;
+    $("statusLine").textContent = page + " module selected.";
+    logEvent(page + " module selected.");
+    if (page !== "Home" && page !== "Chat") {
+      addMessage(page + " module selected. This section is a visual placeholder for a future feature.");
+    }
+    if (page === "Chat") $("message").focus();
+  });
+});
+
+loadProfile();
+</script>
+</body>
+</html>
+
+
+/* Make the JARVIS dashboard fit on one screen */
+html,
+body {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+#app,
+.dashboard,
+.container {
+  max-width: 100%;
+}
