@@ -4,133 +4,244 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#030914">
 <title>J.A.R.V.I.S. | Personal AI</title>
+
 <style>
 :root {
   --cyan: #25dfff;
   --blue: #168cff;
   --orange: #ffad45;
   --bg: #030914;
-  --panel: rgba(4, 19, 36, .91);
+  --panel: rgba(4, 19, 36, .94);
   --line: rgba(37, 223, 255, .38);
   --muted: #7aa8c9;
+  --green: #49ffd2;
 }
-* { box-sizing: border-box; }
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
 body {
   margin: 0;
-  min-height: 100vh;
+  width: 100%;
+  min-height: 100%;
   color: #d9f6ff;
   background:
     radial-gradient(ellipse at 48% 35%, #082c4c 0, transparent 48%),
     linear-gradient(135deg, #020711, #061525 55%, #02050d);
   font-family: "Courier New", monospace;
-  font-size: 14px;
+  font-size: 13px;
 }
-button, input { font: inherit; }
+
+button, input {
+  font: inherit;
+}
+
 button {
   color: var(--cyan);
   background: #071b2e;
   border: 1px solid var(--line);
-  padding: 10px 13px;
+  padding: 9px 11px;
   cursor: pointer;
-  transition: .2s;
+  transition: background .2s, box-shadow .2s;
 }
+
 button:hover {
   background: #103550;
-  box-shadow: 0 0 15px #12bce955;
+  box-shadow: 0 0 12px #12bce955;
 }
+
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
 input {
   width: 100%;
   min-width: 0;
-  padding: 12px;
+  padding: 10px;
   color: white;
   background: #030b16;
   border: 1px solid var(--line);
   outline: none;
 }
-input:focus { border-color: var(--cyan); }
+
+input:focus {
+  border-color: var(--cyan);
+}
+
 .topbar {
-  min-height: 90px;
+  height: 76px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  padding: 15px 24px;
+  gap: 12px;
+  padding: 8px 20px;
   border-bottom: 1px solid var(--cyan);
-  background: #030a15eF;
+  background: #030a15ef;
   box-shadow: 0 4px 25px #00bfff18;
-  flex-wrap: wrap;
 }
+
 .brand {
   color: #e4fbff;
   font-family: Arial, sans-serif;
-  font-size: clamp(25px, 3vw, 40px);
-  letter-spacing: 5px;
+  font-size: clamp(23px, 2.4vw, 32px);
+  letter-spacing: 4px;
   text-shadow: 0 0 17px #16bfff;
 }
+
 .subtitle {
   color: var(--cyan);
-  font-size: 10px;
-  letter-spacing: 2px;
-  margin-top: 6px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  margin-top: 5px;
 }
-.topinfo { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
-.online { color: #49ffd2; }
+
+.topinfo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+  color: #b9eaff;
+  font-size: 11px;
+}
+
+.online {
+  color: var(--green);
+}
+
 .layout {
-  display: grid;
-  grid-template-columns: 205px minmax(0, 1fr) 310px;
-  gap: 12px;
-  padding: 14px;
+  width: 100%;
   max-width: 1800px;
+  height: calc(100vh - 76px);
+  height: calc(100dvh - 76px);
   margin: auto;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr) 280px;
+  gap: 8px;
 }
+
 .panel {
-  position: relative;
   min-width: 0;
-  padding: 16px;
+  padding: 11px;
   background: var(--panel);
   border: 1px solid var(--line);
   box-shadow: inset 0 0 24px #0873a510, 0 0 16px #008bff0c;
-  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px,
-    100% 100%, 15px 100%, 0 calc(100% - 15px));
+  clip-path: polygon(
+    0 0, calc(100% - 12px) 0, 100% 12px,
+    100% 100%, 12px 100%, 0 calc(100% - 12px)
+  );
 }
+
 .heading {
   color: var(--cyan);
-  font-size: 12px;
-  letter-spacing: 2px;
-  margin: 0 0 15px;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  margin: 0 0 9px;
 }
-.sidebar { display: flex; flex-direction: column; gap: 12px; }
+
+.sidebar,
+.right {
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #12618a #03101c;
+}
+
+.sidebar > .panel,
+.right > .panel {
+  flex-shrink: 0;
+}
+
 .navbtn {
   display: block;
   width: 100%;
   text-align: left;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   border-color: transparent;
   background: transparent;
+  padding: 8px;
 }
-.navbtn.active, .navbtn:hover {
+
+.navbtn.active,
+.navbtn:hover {
   border-color: var(--cyan);
   background: #0a2b42;
 }
-.profile { text-align: center; margin-top: 14px; }
+
+.profile {
+  text-align: center;
+}
+
 .avatar {
-  width: 76px; height: 76px; border-radius: 50%;
-  margin: 10px auto;
-  display: grid; place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 8px auto;
+  display: grid;
+  place-items: center;
   overflow: hidden;
   border: 2px solid var(--cyan);
-  box-shadow: 0 0 20px #00cfff66;
-  font-size: 30px;
+  box-shadow: 0 0 18px #00cfff66;
+  font-size: 25px;
   background: radial-gradient(circle, #155779, #061020);
 }
-.avatar img { width: 100%; height: 100%; object-fit: cover; }
-.small { font-size: 11px; color: var(--muted); line-height: 1.6; }
-.profile input { margin: 7px 0; }
-.profile button { width: 100%; margin-top: 5px; }
-.center { display: flex; flex-direction: column; gap: 12px; }
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.small {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.profile input {
+  margin: 5px 0;
+  padding: 8px;
+}
+
+.profile button {
+  width: 100%;
+  margin: 3px 0;
+}
+
+#notice {
+  color: var(--green);
+  min-height: 14px;
+  overflow-wrap: anywhere;
+}
+
+.center {
+  min-height: 0;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: minmax(180px, 1fr) auto auto auto;
+  gap: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #12618a #03101c;
+}
+
 .globe-panel {
-  min-height: 435px;
+  min-height: 0;
+  position: relative;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -140,8 +251,10 @@ input:focus { border-color: var(--cyan); }
     radial-gradient(ellipse, #07325455, #030b17 70%);
   background-size: 25px 25px, 25px 25px, auto;
 }
+
 .globe {
-  width: min(70%, 310px);
+  width: min(43%, 220px);
+  min-width: 120px;
   aspect-ratio: 1;
   position: relative;
   display: grid;
@@ -151,146 +264,388 @@ input:focus { border-color: var(--cyan); }
   box-shadow: 0 0 20px #0bbdff55, inset 0 0 35px #008dff35;
   animation: breathe 4s ease-in-out infinite;
 }
-.globe::before, .globe::after {
+
+.globe::before,
+.globe::after {
   content: "";
   position: absolute;
-  inset: -17px;
+  inset: -12px;
   border: 1px dashed #25dfff9c;
   border-radius: 50%;
   animation: spin 22s linear infinite;
+  pointer-events: none;
 }
+
 .globe::after {
   inset: 12%;
   border: 1px solid #168cff9c;
   animation-duration: 13s;
   animation-direction: reverse;
 }
+
 .earth {
   width: 70%;
   aspect-ratio: 1;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: clamp(70px, 10vw, 125px);
-  background:
-    radial-gradient(circle at 35% 30%, #63f4ff, #0875bc 43%, #02162e 75%);
-  box-shadow: 0 0 40px #0abfff, inset -15px -12px 28px #000b22;
-  filter: saturate(1.1);
+  font-size: clamp(48px, 7vw, 88px);
+  background: radial-gradient(
+    circle at 35% 30%,
+    #63f4ff, #0875bc 43%, #02162e 75%
+  );
+  box-shadow: 0 0 35px #0abfff, inset -15px -12px 28px #000b22;
 }
+
 .orbit {
   position: absolute;
   width: 125%;
   height: 38%;
-  border: 1px solid #ffb24a;
+  border: 1px solid var(--orange);
   border-radius: 50%;
   transform: rotate(-25deg);
   box-shadow: 0 0 10px #ff9c2c55;
 }
+
 .crosshair {
   position: absolute;
-  inset: -30%;
+  inset: -25%;
   border: 1px solid #168cff32;
   border-radius: 50%;
 }
+
 .readout {
   position: absolute;
+  z-index: 1;
   color: var(--cyan);
-  font-size: 11px;
-  line-height: 1.8;
+  font-size: 9px;
+  line-height: 1.6;
   background: #03101ddd;
   border: 1px solid #159acb66;
-  padding: 10px;
+  padding: 6px;
 }
-.readout.one { top: 12%; left: 5%; }
-.readout.two { top: 15%; right: 5%; }
-.readout.three { bottom: 10%; left: 5%; }
-.readout.four { bottom: 12%; right: 5%; }
-@keyframes spin { to { transform: rotate(360deg); } }
+
+.readout.one { top: 5%; left: 3%; }
+.readout.two { top: 5%; right: 3%; }
+.readout.three { bottom: 5%; left: 3%; }
+.readout.four { bottom: 5%; right: 3%; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 @keyframes breathe {
-  50% { box-shadow: 0 0 40px #0bbdff88, inset 0 0 45px #008dff55; }
+  50% {
+    box-shadow: 0 0 35px #0bbdff88, inset 0 0 40px #008dff55;
+  }
 }
+
 .assistant-bar {
+  min-width: 0;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   border: 1px solid var(--line);
-  padding: 14px;
+  padding: 8px;
   background: #051525;
 }
+
 .core {
   flex-shrink: 0;
-  width: 45px; height: 45px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: 2px solid var(--cyan);
-  box-shadow: 0 0 18px #0bbdff;
-  display: grid; place-items: center;
-  color: var(--cyan); font-size: 21px;
+  box-shadow: 0 0 15px #0bbdff;
+  display: grid;
+  place-items: center;
+  color: var(--cyan);
+  font-size: 18px;
   animation: breathe 3s infinite;
 }
-.right { display: flex; flex-direction: column; gap: 12px; }
-.chat { min-height: 410px; display: flex; flex-direction: column; }
+
+#statusLine {
+  margin-top: 4px;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.metric {
+  text-align: center;
+}
+
+.gauge {
+  width: 46px;
+  height: 46px;
+  border: 3px solid #125b83;
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  margin: 5px auto;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-size: 11px;
+}
+
+.shortcuts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.shortcuts button {
+  min-width: 0;
+  min-height: 38px;
+  padding: 5px 2px;
+  font-size: 11px;
+}
+
+.chat {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .chatlog {
   flex: 1;
-  min-height: 270px;
-  max-height: 430px;
+  min-height: 100px;
+  max-height: none;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 5px 0 15px;
+  gap: 8px;
+  padding: 4px 2px 10px 0;
+  scrollbar-width: thin;
+  scrollbar-color: #12618a #03101c;
 }
+
 .msg {
-  padding: 12px;
-  line-height: 1.6;
+  padding: 9px;
+  line-height: 1.5;
   max-width: 95%;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
   border: 1px solid #159acb77;
   background: #09213a;
 }
-.msg.user { align-self: flex-end; border-color: #9a70ff; background: #20193c; }
-.chatform { display: flex; gap: 6px; }
-.chatform button { padding: 10px; }
-.voice { width: 100%; margin-top: 9px; }
-.metrics {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+
+.msg.user {
+  align-self: flex-end;
+  border-color: #9a70ff;
+  background: #20193c;
 }
-.metric { text-align: center; }
-.gauge {
-  width: 65px; height: 65px;
-  border: 4px solid #125b83;
-  border-top-color: var(--cyan);
-  border-radius: 50%;
-  margin: 8px auto;
-  display: grid; place-items: center;
-  color: white;
+
+.chatform {
+  display: flex;
+  gap: 5px;
+  margin-top: 6px;
 }
-.shortcuts {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+
+.chatform input {
+  padding: 9px;
 }
-.shortcuts button { min-height: 60px; }
-footer { text-align: center; padding: 18px; color: #48758f; font-size: 10px; }
-#notice { color: #51ffd3; min-height: 16px; }
-@media(max-width: 1100px) {
-  .layout { grid-template-columns: 180px minmax(0, 1fr); }
-  .right { grid-column: 1 / -1; }
-  .chatlog { min-height: 200px; }
+
+.chatform button {
+  padding: 8px 10px;
 }
-@media(max-width: 650px) {
-  .layout { grid-template-columns: 1fr; padding: 8px; }
-  .right { grid-column: auto; }
-  .topbar { padding: 15px; }
-  .topinfo { gap: 10px; }
-  .globe-panel { min-height: 380px; }
-  .readout { font-size: 9px; padding: 6px; }
-  .shortcuts { grid-template-columns: repeat(2, 1fr); }
+
+.voice {
+  width: 100%;
+  margin-top: 7px;
+}
+
+footer {
+  display: none;
+}
+
+#log {
+  overflow-wrap: anywhere;
+}
+
+@media (max-height: 649px) and (min-width: 1001px) {
+  .layout {
+    grid-template-columns: 160px minmax(0, 1fr) 250px;
+  }
+
+  .panel {
+    padding: 7px;
+  }
+
+  .center {
+    grid-template-rows: minmax(130px, 1fr) auto auto auto;
+  }
+
+  .globe {
+    width: min(35%, 155px);
+    min-width: 100px;
+  }
+
+  .readout {
+    font-size: 8px;
+    padding: 4px;
+  }
+
+  .sidebar .navbtn {
+    padding: 5px;
+  }
+
+  .avatar {
+    width: 46px;
+    height: 46px;
+  }
+
+  .gauge {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .topbar {
+    height: auto;
+    min-height: 76px;
+    flex-wrap: wrap;
+  }
+
+  .layout {
+    height: auto;
+    min-height: calc(100vh - 76px);
+    min-height: calc(100dvh - 76px);
+    grid-template-columns: 170px minmax(0, 1fr);
+  }
+
+  .center {
+    overflow: visible;
+    grid-template-rows: minmax(260px, auto) auto auto auto;
+  }
+
+  .right {
+    grid-column: 1 / -1;
+    overflow: visible;
+  }
+
+  .chat {
+    min-height: 300px;
+  }
+
+  .chatlog {
+    min-height: 150px;
+    max-height: 260px;
+  }
+
+  .globe-panel {
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 12px;
+  }
+
+  .topbar {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .brand {
+    font-size: 25px;
+    letter-spacing: 3px;
+  }
+
+  .subtitle {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  .topinfo {
+    justify-content: flex-start;
+    gap: 8px;
+    font-size: 10px;
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+    padding: 7px;
+    gap: 8px;
+  }
+
+  .sidebar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: visible;
+  }
+
+  .sidebar > .panel:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .sidebar > .panel:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .center {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .globe-panel {
+    min-height: 300px;
+  }
+
+  .globe {
+    width: 42%;
+  }
+
+  .readout {
+    font-size: 8px;
+    padding: 5px;
+  }
+
+  .shortcuts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .shortcuts button {
+    min-height: 46px;
+  }
+
+  .right {
+    overflow: visible;
+  }
+
+  .chat {
+    min-height: 340px;
+  }
+
+  .chatlog {
+    min-height: 180px;
+    max-height: 300px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 </style>
 </head>
+
 <body>
 <header class="topbar">
   <div>
@@ -320,18 +675,18 @@ footer { text-align: center; padding: 18px; color: #48758f; font-size: 10px; }
       <div class="avatar" id="avatar">◈</div>
       <div id="displayName">OPERATOR</div>
       <p class="small">AUTHORIZED USER</p>
-      <input id="username" maxlength="30" placeholder="Your username">
-      <button onclick="saveProfile()">SAVE PROFILE</button>
-      <input id="avatarFile" type="file" accept="image/*">
-      <div id="notice" class="small"></div>
+      <input id="username" maxlength="30" placeholder="Your username" aria-label="Your username">
+      <button id="saveProfile">SAVE PROFILE</button>
+      <input id="avatarFile" type="file" accept="image/*" aria-label="Choose profile picture">
+      <div id="notice" class="small" role="status"></div>
     </section>
 
     <section class="panel">
       <h3 class="heading">QUICK ACTIONS</h3>
-      <button class="navbtn" onclick="voiceInput()">◉ &nbsp; Voice Input</button>
-      <button class="navbtn" onclick="showTime()">◷ &nbsp; Time Check</button>
-      <button class="navbtn" onclick="showDate()">▦ &nbsp; Date Check</button>
-      <button class="navbtn" onclick="clearChat()">⌫ &nbsp; Clear Chat</button>
+      <button class="navbtn" id="voiceButton">◉ &nbsp; Voice Input</button>
+      <button class="navbtn" id="timeButton">◷ &nbsp; Time Check</button>
+      <button class="navbtn" id="dateButton">▦ &nbsp; Date Check</button>
+      <button class="navbtn" id="clearButton">⌫ &nbsp; Clear Chat</button>
     </section>
   </aside>
 
@@ -341,7 +696,7 @@ footer { text-align: center; padding: 18px; color: #48758f; font-size: 10px; }
       <div class="readout two">SYSTEMS<br>ONLINE: 08<br>ALERTS: 00</div>
       <div class="readout three">NETWORK<br>LINK: ACTIVE<br>SECURITY: DEMO</div>
       <div class="readout four">POWER CORE<br>OUTPUT: NOMINAL<br>MODE: ASSIST</div>
-      <div class="globe">
+      <div class="globe" aria-label="Animated holographic globe">
         <div class="crosshair"></div>
         <div class="earth">🌐</div>
         <div class="orbit"></div>
@@ -352,16 +707,25 @@ footer { text-align: center; padding: 18px; color: #48758f; font-size: 10px; }
       <div class="core">✦</div>
       <div>
         <div style="color:var(--cyan);letter-spacing:2px">J.A.R.V.I.S.</div>
-        <div id="statusLine" style="margin-top:7px">All interface systems are ready.</div>
+        <div id="statusLine" role="status">All interface systems are ready.</div>
       </div>
     </section>
 
     <section class="panel">
       <h3 class="heading">SYSTEM TELEMETRY</h3>
       <div class="metrics">
-        <div class="metric"><div class="small">PROCESSOR</div><div class="gauge" id="cpu">12%</div></div>
-        <div class="metric"><div class="small">MEMORY</div><div class="gauge" id="memory">34%</div></div>
-        <div class="metric"><div class="small">STORAGE</div><div class="gauge">58%</div></div>
+        <div class="metric">
+          <div class="small">PROCESSOR</div>
+          <div class="gauge" id="cpu">12%</div>
+        </div>
+        <div class="metric">
+          <div class="small">MEMORY</div>
+          <div class="gauge" id="memory">34%</div>
+        </div>
+        <div class="metric">
+          <div class="small">STORAGE</div>
+          <div class="gauge">58%</div>
+        </div>
       </div>
       <p class="small">Illustrative dashboard values, not actual hardware measurements.</p>
     </section>
@@ -369,10 +733,10 @@ footer { text-align: center; padding: 18px; color: #48758f; font-size: 10px; }
     <section class="panel">
       <h3 class="heading">MISSION CONTROL</h3>
       <div class="shortcuts">
-        <button onclick="setMessage('Help me research a topic')">◎<br>Research</button>
-        <button onclick="setMessage('Help me organize my tasks')">☷<br>Tasks</button>
-        <button onclick="setMessage('Help me with coding')">⌘<br>Coding</button>
-        <button onclick="setMessage('Help me with homework')">▤<br>Homework</button>
+        <button data-prompt="Help me research a topic">◎<br>Research</button>
+        <button data-prompt="Help me organize my tasks">☷<br>Tasks</button>
+        <button data-prompt="Help me with coding">⌘<br>Coding</button>
+        <button data-prompt="Help me with homework">▤<br>Homework</button>
       </div>
     </section>
   </main>
@@ -384,10 +748,10 @@ footer { text-align: center; padding: 18px; color: #48758f; font-size: 10px; }
         <div class="msg">Good day. JARVIS interface initialized. How may I assist you?</div>
       </div>
       <form class="chatform" id="chatform">
-        <input id="message" placeholder="Enter command..." autocomplete="off" required>
+        <input id="message" placeholder="Enter command..." autocomplete="off" required aria-label="Enter command">
         <button aria-label="Send message">➤</button>
       </form>
-      <button class="voice" onclick="voiceInput()">◉ &nbsp; ACTIVATE VOICE INPUT</button>
+      <button class="voice" id="chatVoiceButton">◉ &nbsp; ACTIVATE VOICE INPUT</button>
       <p class="small">LOCAL DEMO MODE · REAL AI NOT CONNECTED</p>
     </section>
 
@@ -398,31 +762,37 @@ footer { text-align: center; padding: 18px; color: #48758f; font-size: 10px; }
   </aside>
 </div>
 
-<footer>J.A.R.V.I.S. PERSONAL INTERFACE · HOLOGRAPHIC UI CONCEPT</footer>
-
 <script>
+"use strict";
+
 const $ = id => document.getElementById(id);
+
 function updateClock() {
   const now = new Date();
   $("clock").textContent = now.toLocaleTimeString();
   $("date").textContent = now.toLocaleDateString();
 }
+
 updateClock();
 setInterval(updateClock, 1000);
 
-function logEvent(text) {
-  $("log").innerHTML = "";
+function logEvent(message) {
+  const log = $("log");
+  log.replaceChildren();
+
   const line = document.createElement("div");
-  line.textContent = "[LOG] " + text;
-  $("log").appendChild(line);
+  line.textContent = "[LOG] " + message;
+  log.appendChild(line);
 }
 
 function saveProfile() {
   const name = $("username").value.trim();
+
   if (!name) {
     $("notice").textContent = "Enter a username first.";
     return;
   }
+
   try {
     localStorage.setItem("jarvisName", name);
     $("displayName").textContent = name.toUpperCase();
@@ -433,6 +803,16 @@ function saveProfile() {
   }
 }
 
+function showPicture(src) {
+  const avatar = $("avatar");
+  avatar.replaceChildren();
+
+  const img = document.createElement("img");
+  img.src = src;
+  img.alt = "Profile picture";
+  avatar.appendChild(img);
+}
+
 function loadProfile() {
   try {
     const name = localStorage.getItem("jarvisName");
@@ -440,32 +820,32 @@ function loadProfile() {
       $("username").value = name;
       $("displayName").textContent = name.toUpperCase();
     }
+
     const picture = localStorage.getItem("jarvisPicture");
     if (picture) showPicture(picture);
-  } catch {}
+  } catch {
+    // The page can still work if browser storage is unavailable.
+  }
 }
 
-function showPicture(src) {
-  const avatar = $("avatar");
-  avatar.textContent = "";
-  const img = document.createElement("img");
-  img.src = src;
-  img.alt = "Profile picture";
-  avatar.appendChild(img);
-}
+$("saveProfile").addEventListener("click", saveProfile);
 
 $("avatarFile").addEventListener("change", event => {
   const file = event.target.files[0];
   if (!file) return;
+
   if (!file.type.startsWith("image/")) {
     $("notice").textContent = "Choose an image file.";
     return;
   }
+
   if (file.size > 700000) {
     $("notice").textContent = "Choose an image smaller than 700 KB.";
     return;
   }
+
   const reader = new FileReader();
+
   reader.onload = () => {
     try {
       localStorage.setItem("jarvisPicture", reader.result);
@@ -475,12 +855,13 @@ $("avatarFile").addEventListener("change", event => {
       $("notice").textContent = "Could not save this image.";
     }
   };
+
   reader.readAsDataURL(file);
 });
 
 function addMessage(text, type = "") {
   const node = document.createElement("div");
-  node.className = "msg " + type;
+  node.className = "msg" + (type ? " " + type : "");
   node.textContent = text;
   $("chatlog").appendChild(node);
   $("chatlog").scrollTop = $("chatlog").scrollHeight;
@@ -488,66 +869,139 @@ function addMessage(text, type = "") {
 
 function respond(text) {
   const q = text.toLowerCase();
-  if (q.includes("time")) return "The current time is " + new Date().toLocaleTimeString() + ".";
-  if (q.includes("date") || q.includes("day is it")) return "Today is " + new Date().toLocaleDateString() + ".";
-  if (q.includes("hello") || q.includes("hey") || q.includes("hi")) return "Hello. All interface systems are operational. What is your next instruction?";
-  if (q.includes("who are you") || q.includes("your name")) return "I am JARVIS, your personal assistant interface. My real AI connection has not been configured yet.";
-  if (q.includes("homework") || q.includes("school")) return "Certainly. Tell me the assignment, the instructions, and where you need assistance.";
-  if (q.includes("code") || q.includes("coding")) return "Coding support ready. Describe your project or paste the error you want to troubleshoot.";
-  if (q.includes("task") || q.includes("organize")) return "Let's organize your tasks. Start by listing what you need to finish and when each task is due.";
-  if (q.includes("help")) return "I can demonstrate the clock, date, profile, and local chat. Connecting a real AI model is a later step.";
-  return "Command received: \"" + text + "\". I am in local demo mode, so I cannot answer this with a real AI model yet.";
+
+  if (q.includes("time")) {
+    return "The current time is " + new Date().toLocaleTimeString() + ".";
+  }
+
+  if (q.includes("date") || q.includes("day is it")) {
+    return "Today is " + new Date().toLocaleDateString() + ".";
+  }
+
+  if (/\b(hello|hey|hi)\b/.test(q)) {
+    return "Hello. All interface systems are operational. What is your next instruction?";
+  }
+
+  if (q.includes("who are you") || q.includes("your name")) {
+    return "I am JARVIS, your personal assistant interface. My real AI connection has not been configured yet.";
+  }
+
+  if (q.includes("homework") || q.includes("school")) {
+    return "Certainly. Tell me the assignment, its instructions, and where you need help.";
+  }
+
+  if (q.includes("code") || q.includes("coding")) {
+    return "Coding support ready. Describe your project or paste the error you want to troubleshoot.";
+  }
+
+  if (q.includes("task") || q.includes("organize")) {
+    return "Let's organize your tasks. List what you need to finish and when each task is due.";
+  }
+
+  if (q.includes("research")) {
+    return "Research mode selected. Tell me the topic you want to investigate. Web research is not connected to this local demo.";
+  }
+
+  if (q.includes("help")) {
+    return "I can demonstrate the clock, date, profile, and local chat. Connecting a real AI model is a later step.";
+  }
+
+  return 'Command received: "' + text + '". I am in local demo mode, so I cannot answer this with a real AI model yet.';
 }
 
 $("chatform").addEventListener("submit", event => {
   event.preventDefault();
-  const text = $("message").value.trim();
+
+  const input = $("message");
+  const text = input.value.trim();
   if (!text) return;
+
   addMessage(text, "user");
-  $("message").value = "";
+  input.value = "";
   $("statusLine").textContent = "Processing command...";
-  setTimeout(() => {
+
+  window.setTimeout(() => {
     addMessage(respond(text));
     $("statusLine").textContent = "Awaiting next instruction.";
     logEvent("Command processed in demo mode.");
-  }, 300);
+  }, 200);
 });
 
 function setMessage(text) {
   $("message").value = text;
   $("message").focus();
 }
-function showTime() { addMessage("Local time: " + new Date().toLocaleTimeString()); }
-function showDate() { addMessage("Local date: " + new Date().toLocaleDateString()); }
+
+function showTime() {
+  addMessage("Local time: " + new Date().toLocaleTimeString());
+}
+
+function showDate() {
+  addMessage("Local date: " + new Date().toLocaleDateString());
+}
+
 function clearChat() {
   $("chatlog").replaceChildren();
   addMessage("Chat cleared. Standing by.");
 }
+
 function voiceInput() {
-  const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const Recognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
   if (!Recognition) {
     addMessage("Voice input is not supported here. Please type your command.");
     return;
   }
+
   const recognition = new Recognition();
   recognition.lang = "en-US";
+
   recognition.onresult = event => {
     setMessage(event.results[0][0].transcript);
   };
-  recognition.onerror = () => addMessage("Voice input failed. Check microphone permissions or type instead.");
-  recognition.start();
+
+  recognition.onerror = () => {
+    addMessage("Voice input failed. Check microphone permissions or type instead.");
+  };
+
+  try {
+    recognition.start();
+  } catch {
+    addMessage("Voice input could not start. Try again or type your command.");
+  }
 }
+
+$("voiceButton").addEventListener("click", voiceInput);
+$("chatVoiceButton").addEventListener("click", voiceInput);
+$("timeButton").addEventListener("click", showTime);
+$("dateButton").addEventListener("click", showDate);
+$("clearButton").addEventListener("click", clearChat);
+
+document.querySelectorAll("[data-prompt]").forEach(button => {
+  button.addEventListener("click", () => {
+    setMessage(button.dataset.prompt);
+  });
+});
 
 document.querySelectorAll(".navbtn[data-page]").forEach(button => {
   button.addEventListener("click", () => {
-    document.querySelectorAll(".navbtn[data-page]").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".navbtn[data-page]").forEach(item => {
+      item.classList.remove("active");
+    });
+
     button.classList.add("active");
+
     const page = button.dataset.page;
     $("statusLine").textContent = page + " module selected.";
     logEvent(page + " module selected.");
+
     if (page !== "Home" && page !== "Chat") {
-      addMessage(page + " module selected. This section is a visual placeholder for a future feature.");
+      addMessage(
+        page + " module selected. This section is a visual placeholder for a future feature."
+      );
     }
+
     if (page === "Chat") $("message").focus();
   });
 });
@@ -556,26 +1010,3 @@ loadProfile();
 </script>
 </body>
 </html>
-
-
-/* Make the JARVIS dashboard fit on one screen */
-html,
-body {
-  margin: 0;
-  width: 100%;
-  min-height: 100%;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  overflow-x: hidden;
-}
-
-#app,
-.dashboard,
-.container {
-  max-width: 100%;
-}
