@@ -3,1010 +3,699 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#030914">
-<title>J.A.R.V.I.S. | Personal AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J.A.R.V.I.S. | Personal Assistant</title>
 
 <style>
 :root {
-  --cyan: #25dfff;
-  --blue: #168cff;
-  --orange: #ffad45;
-  --bg: #030914;
-  --panel: rgba(4, 19, 36, .94);
-  --line: rgba(37, 223, 255, .38);
-  --muted: #7aa8c9;
-  --green: #49ffd2;
+  --bg: #050b14;
+  --panel: rgba(10, 24, 42, .94);
+  --line: #164768;
+  --cyan: #35e6ff;
+  --blue: #4387ff;
+  --text: #e7f8ff;
+  --muted: #82a9bd;
 }
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  height: 100%;
-}
-
+* { box-sizing: border-box; }
 body {
   margin: 0;
-  width: 100%;
-  min-height: 100%;
-  color: #d9f6ff;
+  min-height: 100vh;
   background:
-    radial-gradient(ellipse at 48% 35%, #082c4c 0, transparent 48%),
-    linear-gradient(135deg, #020711, #061525 55%, #02050d);
-  font-family: "Courier New", monospace;
-  font-size: 13px;
+    radial-gradient(ellipse at 50% 35%, #102d49 0%, transparent 55%),
+    var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
 }
-
-button, input {
-  font: inherit;
-}
-
+button, input { font: inherit; }
 button {
-  color: var(--cyan);
-  background: #071b2e;
-  border: 1px solid var(--line);
-  padding: 9px 11px;
   cursor: pointer;
-  transition: background .2s, box-shadow .2s;
+  color: var(--text);
+  background: #102a41;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 13px;
+  transition: .2s;
 }
-
 button:hover {
-  background: #103550;
-  box-shadow: 0 0 12px #12bce955;
+  border-color: var(--cyan);
+  background: #153b55;
 }
-
-button:focus-visible,
-input:focus-visible {
+button:focus-visible, input:focus-visible {
   outline: 2px solid var(--cyan);
   outline-offset: 2px;
 }
-
-input {
-  width: 100%;
-  min-width: 0;
-  padding: 10px;
-  color: white;
-  background: #030b16;
-  border: 1px solid var(--line);
-  outline: none;
-}
-
-input:focus {
-  border-color: var(--cyan);
-}
-
 .topbar {
-  height: 76px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 8px 20px;
-  border-bottom: 1px solid var(--cyan);
-  background: #030a15ef;
-  box-shadow: 0 4px 25px #00bfff18;
+  padding: 0 22px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(3, 10, 19, .92);
 }
-
 .brand {
-  color: #e4fbff;
-  font-family: Arial, sans-serif;
-  font-size: clamp(23px, 2.4vw, 32px);
-  letter-spacing: 4px;
-  text-shadow: 0 0 17px #16bfff;
-}
-
-.subtitle {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: 3px;
   color: var(--cyan);
+}
+.brand small {
+  display: block;
   font-size: 9px;
-  letter-spacing: 1.5px;
-  margin-top: 5px;
+  letter-spacing: 4px;
+  color: var(--muted);
+  margin-top: 4px;
 }
-
-.topinfo {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 14px;
-  flex-wrap: wrap;
-  color: #b9eaff;
-  font-size: 11px;
-}
-
-.online {
-  color: var(--green);
-}
-
+.clock { text-align: right; font-size: 17px; }
+.clock small { display: block; color: var(--muted); font-size: 11px; margin-top: 4px; }
 .layout {
-  width: 100%;
   max-width: 1800px;
-  height: calc(100vh - 76px);
-  height: calc(100dvh - 76px);
   margin: auto;
-  padding: 8px;
+  padding: 12px;
   display: grid;
-  grid-template-columns: 180px minmax(0, 1fr) 280px;
-  gap: 8px;
+  grid-template-columns: 200px minmax(250px, 1fr) minmax(290px, 350px);
+  gap: 12px;
+  min-height: calc(100vh - 70px);
 }
-
 .panel {
   min-width: 0;
-  padding: 11px;
   background: var(--panel);
   border: 1px solid var(--line);
-  box-shadow: inset 0 0 24px #0873a510, 0 0 16px #008bff0c;
-  clip-path: polygon(
-    0 0, calc(100% - 12px) 0, 100% 12px,
-    100% 100%, 12px 100%, 0 calc(100% - 12px)
-  );
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 0 22px #03101c;
 }
-
-.heading {
+.section-title {
   color: var(--cyan);
   font-size: 11px;
-  letter-spacing: 1.5px;
-  margin: 0 0 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0 0 13px;
 }
-
-.sidebar,
-.right {
-  min-height: 0;
-  min-width: 0;
+.sidebar, .right {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #12618a #03101c;
+  gap: 12px;
 }
-
-.sidebar > .panel,
-.right > .panel {
-  flex-shrink: 0;
-}
-
-.navbtn {
-  display: block;
-  width: 100%;
-  text-align: left;
-  margin-bottom: 4px;
-  border-color: transparent;
-  background: transparent;
-  padding: 8px;
-}
-
-.navbtn.active,
-.navbtn:hover {
-  border-color: var(--cyan);
-  background: #0a2b42;
-}
-
-.profile {
-  text-align: center;
-}
-
+.nav-buttons { display: grid; gap: 7px; }
+.nav-buttons button { text-align: left; }
+.profile { text-align: center; }
 .avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  margin: 8px auto;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
+  width: 62px;
+  height: 62px;
   border: 2px solid var(--cyan);
-  box-shadow: 0 0 18px #00cfff66;
-  font-size: 25px;
-  background: radial-gradient(circle, #155779, #061020);
-}
-
-.avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.small {
-  font-size: 10px;
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-.profile input {
-  margin: 5px 0;
-  padding: 8px;
-}
-
-.profile button {
-  width: 100%;
-  margin: 3px 0;
-}
-
-#notice {
-  color: var(--green);
-  min-height: 14px;
-  overflow-wrap: anywhere;
-}
-
-.center {
-  min-height: 0;
-  min-width: 0;
-  display: grid;
-  grid-template-rows: minmax(180px, 1fr) auto auto auto;
-  gap: 8px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #12618a #03101c;
-}
-
-.globe-panel {
-  min-height: 0;
-  position: relative;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  background:
-    linear-gradient(#0a28431b 1px, transparent 1px),
-    linear-gradient(90deg, #0a28431b 1px, transparent 1px),
-    radial-gradient(ellipse, #07325455, #030b17 70%);
-  background-size: 25px 25px, 25px 25px, auto;
-}
-
-.globe {
-  width: min(43%, 220px);
-  min-width: 120px;
-  aspect-ratio: 1;
-  position: relative;
-  display: grid;
-  place-items: center;
-  border: 1px solid #29dfff;
   border-radius: 50%;
-  box-shadow: 0 0 20px #0bbdff55, inset 0 0 35px #008dff35;
-  animation: breathe 4s ease-in-out infinite;
+  margin: 0 auto 10px;
+  display: grid;
+  place-items: center;
+  font-size: 27px;
+  overflow: hidden;
+  background: #102a41;
 }
-
-.globe::before,
-.globe::after {
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.profile-name { font-weight: bold; margin-bottom: 8px; }
+.small-note { color: var(--muted); font-size: 11px; line-height: 1.5; }
+.profile input { width: 100%; margin: 6px 0; }
+input {
+  min-width: 0;
+  width: 100%;
+  color: var(--text);
+  background: #071421;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 11px;
+}
+.center {
+  display: grid;
+  grid-template-rows: minmax(210px, 1fr) auto auto;
+  gap: 12px;
+}
+.hero {
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+}
+.hero::before {
   content: "";
   position: absolute;
-  inset: -12px;
-  border: 1px dashed #25dfff9c;
+  width: 320px;
+  height: 320px;
+  border: 1px solid #164768;
   border-radius: 50%;
-  animation: spin 22s linear infinite;
-  pointer-events: none;
+  box-shadow: 0 0 35px #06415c, inset 0 0 35px #06415c;
+  animation: rotate 18s linear infinite;
 }
-
-.globe::after {
-  inset: 12%;
-  border: 1px solid #168cff9c;
-  animation-duration: 13s;
-  animation-direction: reverse;
-}
-
-.earth {
-  width: 70%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: clamp(48px, 7vw, 88px);
-  background: radial-gradient(
-    circle at 35% 30%,
-    #63f4ff, #0875bc 43%, #02162e 75%
-  );
-  box-shadow: 0 0 35px #0abfff, inset -15px -12px 28px #000b22;
-}
-
-.orbit {
+.hero::after {
+  content: "";
   position: absolute;
-  width: 125%;
-  height: 38%;
-  border: 1px solid var(--orange);
+  width: 235px;
+  height: 235px;
+  border: 1px dashed var(--cyan);
   border-radius: 50%;
-  transform: rotate(-25deg);
-  box-shadow: 0 0 10px #ff9c2c55;
+  animation: rotate 12s linear infinite reverse;
 }
-
-.crosshair {
-  position: absolute;
-  inset: -25%;
-  border: 1px solid #168cff32;
-  border-radius: 50%;
-}
-
-.readout {
-  position: absolute;
+.orb {
   z-index: 1;
+  width: 145px;
+  height: 145px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #c7fbff, #39dafa 20%, #1677c5 48%, #07152d 73%);
+  box-shadow: 0 0 35px #14bde9, 0 0 80px #075a9c;
+  animation: pulse 3s ease-in-out infinite;
+}
+.hero h1 {
+  z-index: 2;
+  margin: 15px 0 4px;
+  font-size: 20px;
+  letter-spacing: 4px;
   color: var(--cyan);
-  font-size: 9px;
-  line-height: 1.6;
-  background: #03101ddd;
-  border: 1px solid #159acb66;
-  padding: 6px;
 }
-
-.readout.one { top: 5%; left: 3%; }
-.readout.two { top: 5%; right: 3%; }
-.readout.three { bottom: 5%; left: 3%; }
-.readout.four { bottom: 5%; right: 3%; }
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
+.hero p { z-index: 2; margin: 0; font-size: 12px; color: var(--muted); }
+.hero.listening .orb {
+  box-shadow: 0 0 55px #35e6ff, 0 0 100px #4387ff;
+  animation-duration: .8s;
 }
-
-@keyframes breathe {
-  50% {
-    box-shadow: 0 0 35px #0bbdff88, inset 0 0 40px #008dff55;
-  }
-}
-
-.assistant-bar {
-  min-width: 0;
+@keyframes rotate { to { transform: rotate(360deg); } }
+@keyframes pulse { 50% { transform: scale(1.06); } }
+.status-row {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
+}
+.status { color: #6fffc0; font-size: 12px; }
+.tools { display: flex; gap: 8px; flex-wrap: wrap; }
+.tools button { flex: 1; }
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.info-card {
+  background: #071522;
   border: 1px solid var(--line);
-  padding: 8px;
-  background: #051525;
+  border-radius: 11px;
+  padding: 12px;
 }
-
-.core {
-  flex-shrink: 0;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 2px solid var(--cyan);
-  box-shadow: 0 0 15px #0bbdff;
-  display: grid;
-  place-items: center;
-  color: var(--cyan);
-  font-size: 18px;
-  animation: breathe 3s infinite;
-}
-
-#statusLine {
-  margin-top: 4px;
-  font-size: 11px;
-  overflow-wrap: anywhere;
-}
-
-.metrics {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 5px;
-}
-
-.metric {
-  text-align: center;
-}
-
-.gauge {
-  width: 46px;
-  height: 46px;
-  border: 3px solid #125b83;
-  border-top-color: var(--cyan);
-  border-radius: 50%;
-  margin: 5px auto;
-  display: grid;
-  place-items: center;
-  color: white;
-  font-size: 11px;
-}
-
-.shortcuts {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 5px;
-}
-
-.shortcuts button {
-  min-width: 0;
-  min-height: 38px;
-  padding: 5px 2px;
-  font-size: 11px;
-}
-
-.chat {
+.info-card small { color: var(--muted); display: block; font-size: 10px; }
+.info-card strong { display: block; margin-top: 8px; font-size: 13px; }
+.chat-panel {
   min-height: 0;
-  flex: 1;
   display: flex;
   flex-direction: column;
 }
-
 .chatlog {
   flex: 1;
-  min-height: 100px;
-  max-height: none;
+  min-height: 180px;
+  max-height: calc(100vh - 310px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 4px 2px 10px 0;
-  scrollbar-width: thin;
-  scrollbar-color: #12618a #03101c;
+  gap: 10px;
+  padding: 4px 2px 12px;
 }
-
-.msg {
-  padding: 9px;
+.message {
+  padding: 11px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #081724;
+  font-size: 13px;
   line-height: 1.5;
-  max-width: 95%;
   overflow-wrap: anywhere;
-  white-space: pre-wrap;
-  border: 1px solid #159acb77;
-  background: #09213a;
 }
-
-.msg.user {
-  align-self: flex-end;
-  border-color: #9a70ff;
-  background: #20193c;
-}
-
-.chatform {
-  display: flex;
-  gap: 5px;
-  margin-top: 6px;
-}
-
-.chatform input {
-  padding: 9px;
-}
-
-.chatform button {
-  padding: 8px 10px;
-}
-
-.voice {
-  width: 100%;
-  margin-top: 7px;
-}
-
+.message.user { border-color: #2363a3; background: #0b2037; }
+.message b { display: block; color: var(--cyan); font-size: 10px; margin-bottom: 5px; }
+.message p { margin: 0; white-space: pre-wrap; }
+.chat-input { display: flex; gap: 7px; margin-top: 9px; }
+.chat-input input { flex: 1; }
+.chat-input button { padding: 10px; }
+.voice-tools { display: flex; gap: 7px; margin-top: 8px; }
+.voice-tools button { flex: 1; font-size: 12px; }
+.logline { font-size: 11px; color: var(--muted); margin: 6px 0; }
 footer {
-  display: none;
+  text-align: center;
+  padding: 10px;
+  color: var(--muted);
+  font-size: 10px;
 }
-
-#log {
-  overflow-wrap: anywhere;
+@media (min-width: 1001px) {
+  body { overflow: hidden; }
+  .layout { height: calc(100vh - 70px); min-height: 0; }
+  .sidebar, .right { overflow-y: auto; }
+  .center { min-height: 0; overflow-y: auto; }
 }
-
-@media (max-height: 649px) and (min-width: 1001px) {
-  .layout {
-    grid-template-columns: 160px minmax(0, 1fr) 250px;
-  }
-
-  .panel {
-    padding: 7px;
-  }
-
-  .center {
-    grid-template-rows: minmax(130px, 1fr) auto auto auto;
-  }
-
-  .globe {
-    width: min(35%, 155px);
-    min-width: 100px;
-  }
-
-  .readout {
-    font-size: 8px;
-    padding: 4px;
-  }
-
-  .sidebar .navbtn {
-    padding: 5px;
-  }
-
-  .avatar {
-    width: 46px;
-    height: 46px;
-  }
-
-  .gauge {
-    width: 36px;
-    height: 36px;
-  }
+@media (max-height: 720px) and (min-width: 1001px) {
+  .panel { padding: 10px; }
+  .hero { min-height: 185px; }
+  .hero::before { width: 230px; height: 230px; }
+  .hero::after { width: 175px; height: 175px; }
+  .orb { width: 105px; height: 105px; }
+  .chatlog { max-height: calc(100vh - 260px); }
 }
-
 @media (max-width: 1000px) {
-  .topbar {
-    height: auto;
-    min-height: 76px;
-    flex-wrap: wrap;
-  }
-
-  .layout {
-    height: auto;
-    min-height: calc(100vh - 76px);
-    min-height: calc(100dvh - 76px);
-    grid-template-columns: 170px minmax(0, 1fr);
-  }
-
-  .center {
-    overflow: visible;
-    grid-template-rows: minmax(260px, auto) auto auto auto;
-  }
-
-  .right {
-    grid-column: 1 / -1;
-    overflow: visible;
-  }
-
-  .chat {
-    min-height: 300px;
-  }
-
-  .chatlog {
-    min-height: 150px;
-    max-height: 260px;
-  }
-
-  .globe-panel {
-    min-height: 260px;
-  }
+  .layout { grid-template-columns: 170px minmax(0, 1fr); }
+  .right { grid-column: 1 / -1; }
+  .chatlog { max-height: 350px; }
 }
-
-@media (max-width: 600px) {
-  body {
-    font-size: 12px;
-  }
-
-  .topbar {
-    padding: 12px;
-    gap: 12px;
-  }
-
-  .brand {
-    font-size: 25px;
-    letter-spacing: 3px;
-  }
-
-  .subtitle {
-    font-size: 8px;
-    letter-spacing: 1px;
-  }
-
-  .topinfo {
-    justify-content: flex-start;
-    gap: 8px;
-    font-size: 10px;
-  }
-
-  .layout {
-    display: flex;
-    flex-direction: column;
-    padding: 7px;
-    gap: 8px;
-  }
-
-  .sidebar {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow: visible;
-  }
-
-  .sidebar > .panel:first-child {
-    grid-column: 1 / -1;
-  }
-
-  .sidebar > .panel:last-child {
-    grid-column: 1 / -1;
-  }
-
-  .center {
-    display: flex;
-    flex-direction: column;
-    overflow: visible;
-  }
-
-  .globe-panel {
-    min-height: 300px;
-  }
-
-  .globe {
-    width: 42%;
-  }
-
-  .readout {
-    font-size: 8px;
-    padding: 5px;
-  }
-
-  .shortcuts {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .shortcuts button {
-    min-height: 46px;
-  }
-
-  .right {
-    overflow: visible;
-  }
-
-  .chat {
-    min-height: 340px;
-  }
-
-  .chatlog {
-    min-height: 180px;
-    max-height: 300px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
+@media (max-width: 620px) {
+  .topbar { padding: 0 12px; height: 62px; }
+  .brand { font-size: 16px; }
+  .clock { font-size: 14px; }
+  .layout { display: flex; flex-direction: column; padding: 8px; }
+  .sidebar { display: grid; grid-template-columns: 1fr 1fr; }
+  .hero { min-height: 240px; }
+  .info-grid { grid-template-columns: 1fr; }
+  .chatlog { max-height: 45vh; }
+  .chat-input { flex-wrap: wrap; }
 }
 </style>
 </head>
 
 <body>
 <header class="topbar">
-  <div>
-    <div class="brand">J.A.R.V.I.S.</div>
-    <div class="subtitle">JUST A RATHER VERY INTELLIGENT SYSTEM</div>
-  </div>
-  <div class="topinfo">
-    <span class="online">● SYSTEM ONLINE</span>
+  <div class="brand">J.A.R.V.I.S.<small>PERSONAL ASSISTANT</small></div>
+  <div class="clock">
     <span id="clock">--:--:--</span>
-    <span id="date">INITIALIZING</span>
+    <small id="date">Loading date...</small>
   </div>
 </header>
 
 <div class="layout">
   <aside class="sidebar">
     <section class="panel">
-      <h3 class="heading">NAVIGATION</h3>
-      <button class="navbtn active" data-page="Home">⌂ &nbsp; Home</button>
-      <button class="navbtn" data-page="Chat">▤ &nbsp; Chat</button>
-      <button class="navbtn" data-page="Files">▱ &nbsp; Files</button>
-      <button class="navbtn" data-page="Tasks">☑ &nbsp; Tasks</button>
-      <button class="navbtn" data-page="Settings">⚙ &nbsp; Settings</button>
+      <h2 class="section-title">Navigation</h2>
+      <div class="nav-buttons">
+        <button data-action="home">⌂ Home</button>
+        <button data-action="chat">◉ Chat assistant</button>
+        <button data-action="tasks">✓ Tasks</button>
+        <button data-action="settings">⚙ Settings</button>
+      </div>
     </section>
 
     <section class="panel profile">
-      <h3 class="heading">USER PROFILE</h3>
-      <div class="avatar" id="avatar">◈</div>
-      <div id="displayName">OPERATOR</div>
-      <p class="small">AUTHORIZED USER</p>
-      <input id="username" maxlength="30" placeholder="Your username" aria-label="Your username">
-      <button id="saveProfile">SAVE PROFILE</button>
-      <input id="avatarFile" type="file" accept="image/*" aria-label="Choose profile picture">
-      <div id="notice" class="small" role="status"></div>
+      <h2 class="section-title">Your profile</h2>
+      <div class="avatar" id="avatar">🤖</div>
+      <div class="profile-name" id="profileName">Commander</div>
+      <input id="nameInput" maxlength="30" placeholder="Your username">
+      <button id="saveName" style="width:100%">Save username</button>
+      <label class="small-note" style="display:block;margin-top:12px">
+        Choose profile picture
+        <input type="file" id="photoInput" accept="image/*">
+      </label>
+      <p class="small-note">Profile settings are saved in this browser only.</p>
     </section>
 
     <section class="panel">
-      <h3 class="heading">QUICK ACTIONS</h3>
-      <button class="navbtn" id="voiceButton">◉ &nbsp; Voice Input</button>
-      <button class="navbtn" id="timeButton">◷ &nbsp; Time Check</button>
-      <button class="navbtn" id="dateButton">▦ &nbsp; Date Check</button>
-      <button class="navbtn" id="clearButton">⌫ &nbsp; Clear Chat</button>
+      <h2 class="section-title">Quick actions</h2>
+      <div class="nav-buttons">
+        <button id="focusChat">💬 Start chatting</button>
+        <button id="repeatLast">🔊 Repeat last answer</button>
+        <button id="stopSpeech">⏹ Stop speaking</button>
+      </div>
     </section>
   </aside>
 
   <main class="center">
-    <section class="panel globe-panel">
-      <div class="readout one">PLANETARY SCAN<br>EARTH / SOL-3<br>STATUS: STABLE</div>
-      <div class="readout two">SYSTEMS<br>ONLINE: 08<br>ALERTS: 00</div>
-      <div class="readout three">NETWORK<br>LINK: ACTIVE<br>SECURITY: DEMO</div>
-      <div class="readout four">POWER CORE<br>OUTPUT: NOMINAL<br>MODE: ASSIST</div>
-      <div class="globe" aria-label="Animated holographic globe">
-        <div class="crosshair"></div>
-        <div class="earth">🌐</div>
-        <div class="orbit"></div>
-      </div>
-    </section>
-
-    <section class="assistant-bar">
-      <div class="core">✦</div>
-      <div>
-        <div style="color:var(--cyan);letter-spacing:2px">J.A.R.V.I.S.</div>
-        <div id="statusLine" role="status">All interface systems are ready.</div>
-      </div>
+    <section class="panel hero" id="hero">
+      <div class="orb"></div>
+      <h1>J.A.R.V.I.S.</h1>
+      <p id="heroStatus">PERSONAL SYSTEM ONLINE</p>
     </section>
 
     <section class="panel">
-      <h3 class="heading">SYSTEM TELEMETRY</h3>
-      <div class="metrics">
-        <div class="metric">
-          <div class="small">PROCESSOR</div>
-          <div class="gauge" id="cpu">12%</div>
-        </div>
-        <div class="metric">
-          <div class="small">MEMORY</div>
-          <div class="gauge" id="memory">34%</div>
-        </div>
-        <div class="metric">
-          <div class="small">STORAGE</div>
-          <div class="gauge">58%</div>
-        </div>
+      <div class="status-row">
+        <span class="section-title" style="margin:0">Voice controls</span>
+        <span class="status" id="systemStatus">● READY</span>
       </div>
-      <p class="small">Illustrative dashboard values, not actual hardware measurements.</p>
+      <p class="small-note">
+        Speak to enter a question, or type it below. Use Speak answer to hear JARVIS.
+      </p>
+      <div class="tools">
+        <button id="listenButton">🎙 Listen</button>
+        <button id="speakToggle">🔊 Voice: ON</button>
+        <button id="testVoice">▶ Test voice</button>
+      </div>
+      <p class="small-note" id="voiceStatus" aria-live="polite">
+        Voice features depend on your browser permissions and support.
+      </p>
     </section>
 
     <section class="panel">
-      <h3 class="heading">MISSION CONTROL</h3>
-      <div class="shortcuts">
-        <button data-prompt="Help me research a topic">◎<br>Research</button>
-        <button data-prompt="Help me organize my tasks">☷<br>Tasks</button>
-        <button data-prompt="Help me with coding">⌘<br>Coding</button>
-        <button data-prompt="Help me with homework">▤<br>Homework</button>
+      <h2 class="section-title">System overview</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <small>ASSISTANT</small>
+          <strong>JARVIS</strong>
+        </div>
+        <div class="info-card">
+          <small>VOICE OUTPUT</small>
+          <strong id="voiceState">Enabled</strong>
+        </div>
+        <div class="info-card">
+          <small>AI CONNECTION</small>
+          <strong>Not connected</strong>
+        </div>
       </div>
+      <p class="small-note">
+        This version does not connect to a real AI model yet. Its demo replies are not answers from ChatGPT.
+      </p>
     </section>
   </main>
 
-  <aside class="right">
-    <section class="panel chat">
-      <h3 class="heading">◉ &nbsp; J.A.R.V.I.S. ASSISTANT</h3>
-      <div class="chatlog" id="chatlog" aria-live="polite">
-        <div class="msg">Good day. JARVIS interface initialized. How may I assist you?</div>
+  <aside class="panel chat-panel" id="chatPanel">
+    <h2 class="section-title">Talk to JARVIS</h2>
+    <div class="chatlog" id="chatlog" aria-live="polite">
+      <div class="message">
+        <b>JARVIS</b>
+        <p>Hello! Voice controls are ready to test. I can demonstrate the interface, but I need an AI connection to answer general questions accurately.</p>
       </div>
-      <form class="chatform" id="chatform">
-        <input id="message" placeholder="Enter command..." autocomplete="off" required aria-label="Enter command">
-        <button aria-label="Send message">➤</button>
-      </form>
-      <button class="voice" id="chatVoiceButton">◉ &nbsp; ACTIVATE VOICE INPUT</button>
-      <p class="small">LOCAL DEMO MODE · REAL AI NOT CONNECTED</p>
-    </section>
-
-    <section class="panel">
-      <h3 class="heading">SYSTEM LOG</h3>
-      <div id="log" class="small">[BOOT] Interface initialized.<br>[LINK] Local mode active.<br>[AI] Awaiting connection.</div>
+    </div>
+    <form id="chatForm">
+      <div class="chat-input">
+        <input id="chatInput" autocomplete="off" placeholder="Ask JARVIS something..." aria-label="Message to JARVIS">
+        <button type="submit">Send</button>
+      </div>
+    </form>
+    <div class="voice-tools">
+      <button id="speakAnswer">🔊 Speak answer</button>
+      <button id="clearChat">Clear chat</button>
+    </div>
+    <section style="margin-top:16px">
+      <h2 class="section-title">System log</h2>
+      <p class="logline" id="logline">System initialized.</p>
+      <p class="logline">Speech output: browser-based</p>
+      <p class="logline">AI status: not connected</p>
     </section>
   </aside>
 </div>
 
-<script>
-"use strict";
+<footer>J.A.R.V.I.S. PERSONAL INTERFACE · BROWSER VOICE MODE</footer>
 
+<script>
 const $ = id => document.getElementById(id);
+
+let voiceEnabled = true;
+let lastAnswer = "";
+let recognition = null;
+let isListening = false;
+
+function log(message) {
+  $("logline").textContent = message;
+}
 
 function updateClock() {
   const now = new Date();
   $("clock").textContent = now.toLocaleTimeString();
-  $("date").textContent = now.toLocaleDateString();
+  $("date").textContent = now.toLocaleDateString(undefined, {
+    weekday: "short", month: "short", day: "numeric", year: "numeric"
+  });
 }
-
 updateClock();
 setInterval(updateClock, 1000);
 
-function logEvent(message) {
-  const log = $("log");
-  log.replaceChildren();
+function addMessage(sender, text, isUser = false) {
+  const box = document.createElement("div");
+  box.className = "message" + (isUser ? " user" : "");
 
-  const line = document.createElement("div");
-  line.textContent = "[LOG] " + message;
-  log.appendChild(line);
+  const label = document.createElement("b");
+  label.textContent = sender;
+
+  const paragraph = document.createElement("p");
+  paragraph.textContent = text;
+
+  box.append(label, paragraph);
+  $("chatlog").appendChild(box);
+  $("chatlog").scrollTop = $("chatlog").scrollHeight;
 }
 
-function saveProfile() {
-  const name = $("username").value.trim();
-
-  if (!name) {
-    $("notice").textContent = "Enter a username first.";
+function speak(text) {
+  if (!voiceEnabled || !("speechSynthesis" in window)) {
+    $("voiceStatus").textContent =
+      "Speech output is unavailable or switched off.";
     return;
   }
 
-  try {
-    localStorage.setItem("jarvisName", name);
-    $("displayName").textContent = name.toUpperCase();
-    $("notice").textContent = "Profile saved in this browser.";
-    logEvent("Profile updated.");
-  } catch {
-    $("notice").textContent = "Browser storage unavailable.";
-  }
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "en-US";
+  utterance.rate = 1;
+  utterance.pitch = 1;
+
+  utterance.onstart = () => {
+    $("voiceStatus").textContent = "JARVIS is speaking...";
+    log("Voice output active.");
+  };
+  utterance.onend = () => {
+    $("voiceStatus").textContent = "Ready for your next question.";
+    log("Voice output finished.");
+  };
+  utterance.onerror = () => {
+    $("voiceStatus").textContent =
+      "Voice playback failed. Try again or check browser audio.";
+  };
+
+  window.speechSynthesis.speak(utterance);
 }
 
-function showPicture(src) {
-  const avatar = $("avatar");
-  avatar.replaceChildren();
+function demoReply(question) {
+  const q = question.toLowerCase().trim();
 
+  if (/^(hi|hello|hey)\b/.test(q)) {
+    return "Hello! I'm ready to help test your JARVIS interface. My general AI connection has not been set up yet.";
+  }
+  if (q.includes("your name") || q.includes("who are you")) {
+    return "I'm JARVIS, your personal assistant interface. I can use your browser's voice features, but I am not connected to a real AI model yet.";
+  }
+  if (q.includes("time")) {
+    return "The current time on this device is " + new Date().toLocaleTimeString() + ".";
+  }
+  if (q.includes("date") || q.includes("today")) {
+    return "The date on this device is " + new Date().toLocaleDateString() + ".";
+  }
+  if (q.includes("voice") || q.includes("speak")) {
+    return "You can use the Listen button to dictate a message, then use Speak answer to hear my reply. General AI answers still need an AI connection.";
+  }
+  if (q.includes("help")) {
+    return "You can type a message, press Listen to dictate one, use Voice to switch spoken replies on or off, or press Test voice to check audio. To answer general questions, I need an AI service connected.";
+  }
+  return "I received your question: \"" + question + "\". This is a demo reply, not an AI-generated answer. The next step is connecting JARVIS to an AI service that can answer general questions.";
+}
+
+function sendQuestion(question) {
+  const clean = question.trim();
+  if (!clean) return;
+
+  addMessage("YOU", clean, true);
+  $("chatInput").value = "";
+  $("systemStatus").textContent = "● PROCESSING";
+  $("heroStatus").textContent = "PROCESSING REQUEST...";
+
+  const answer = demoReply(clean);
+  lastAnswer = answer;
+
+  addMessage("JARVIS", answer);
+  $("systemStatus").textContent = "● READY";
+  $("heroStatus").textContent = "PERSONAL SYSTEM ONLINE";
+  log("Received a new message.");
+
+  if (voiceEnabled) speak(answer);
+}
+
+$("chatForm").addEventListener("submit", event => {
+  event.preventDefault();
+  sendQuestion($("chatInput").value);
+});
+
+$("speakAnswer").addEventListener("click", () => {
+  if (lastAnswer) speak(lastAnswer);
+  else $("voiceStatus").textContent = "There is no answer to read yet.";
+});
+
+$("repeatLast").addEventListener("click", () => {
+  if (lastAnswer) speak(lastAnswer);
+  else $("voiceStatus").textContent = "There is no answer to repeat yet.";
+});
+
+$("stopSpeech").addEventListener("click", () => {
+  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+  $("voiceStatus").textContent = "Speech stopped.";
+  log("Voice output stopped.");
+});
+
+$("speakToggle").addEventListener("click", () => {
+  voiceEnabled = !voiceEnabled;
+  $("speakToggle").textContent = voiceEnabled ? "🔊 Voice: ON" : "🔇 Voice: OFF";
+  $("voiceState").textContent = voiceEnabled ? "Enabled" : "Muted";
+  if (!voiceEnabled && "speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+  $("voiceStatus").textContent = voiceEnabled
+    ? "Spoken replies are enabled."
+    : "Spoken replies are disabled.";
+});
+
+$("testVoice").addEventListener("click", () => {
+  voiceEnabled = true;
+  $("speakToggle").textContent = "🔊 Voice: ON";
+  $("voiceState").textContent = "Enabled";
+  speak("Hello. I am JARVIS. My voice system is working.");
+});
+
+$("focusChat").addEventListener("click", () => {
+  $("chatInput").focus();
+});
+
+$("clearChat").addEventListener("click", () => {
+  $("chatlog").replaceChildren();
+  lastAnswer = "";
+  log("Chat cleared.");
+});
+
+$("nameInput").value = localStorage.getItem("jarvisUsername") || "Commander";
+$("profileName").textContent = $("nameInput").value;
+
+$("saveName").addEventListener("click", () => {
+  const name = $("nameInput").value.trim().slice(0, 30) || "Commander";
+  $("nameInput").value = name;
+  $("profileName").textContent = name;
+  localStorage.setItem("jarvisUsername", name);
+  log("Profile name saved in this browser.");
+});
+
+const savedPhoto = localStorage.getItem("jarvisPhoto");
+if (savedPhoto) showPhoto(savedPhoto);
+
+function showPhoto(src) {
   const img = document.createElement("img");
-  img.src = src;
   img.alt = "Profile picture";
-  avatar.appendChild(img);
+  img.src = src;
+  $("avatar").replaceChildren(img);
 }
 
-function loadProfile() {
-  try {
-    const name = localStorage.getItem("jarvisName");
-    if (name) {
-      $("username").value = name;
-      $("displayName").textContent = name.toUpperCase();
-    }
-
-    const picture = localStorage.getItem("jarvisPicture");
-    if (picture) showPicture(picture);
-  } catch {
-    // The page can still work if browser storage is unavailable.
-  }
-}
-
-$("saveProfile").addEventListener("click", saveProfile);
-
-$("avatarFile").addEventListener("change", event => {
-  const file = event.target.files[0];
+$("photoInput").addEventListener("change", event => {
+  const file = event.target.files && event.target.files[0];
   if (!file) return;
 
   if (!file.type.startsWith("image/")) {
-    $("notice").textContent = "Choose an image file.";
+    $("voiceStatus").textContent = "Please choose an image file.";
     return;
   }
-
-  if (file.size > 700000) {
-    $("notice").textContent = "Choose an image smaller than 700 KB.";
+  if (file.size > 500000) {
+    $("voiceStatus").textContent =
+      "Please choose an image smaller than 500 KB.";
     return;
   }
 
   const reader = new FileReader();
-
   reader.onload = () => {
     try {
-      localStorage.setItem("jarvisPicture", reader.result);
-      showPicture(reader.result);
-      $("notice").textContent = "Picture saved in this browser.";
+      localStorage.setItem("jarvisPhoto", reader.result);
+      showPhoto(reader.result);
+      log("Profile picture saved in this browser.");
     } catch {
-      $("notice").textContent = "Could not save this image.";
+      $("voiceStatus").textContent =
+        "The image could not be saved. Try a smaller image.";
     }
   };
-
   reader.readAsDataURL(file);
 });
 
-function addMessage(text, type = "") {
-  const node = document.createElement("div");
-  node.className = "msg" + (type ? " " + type : "");
-  node.textContent = text;
-  $("chatlog").appendChild(node);
-  $("chatlog").scrollTop = $("chatlog").scrollHeight;
-}
-
-function respond(text) {
-  const q = text.toLowerCase();
-
-  if (q.includes("time")) {
-    return "The current time is " + new Date().toLocaleTimeString() + ".";
-  }
-
-  if (q.includes("date") || q.includes("day is it")) {
-    return "Today is " + new Date().toLocaleDateString() + ".";
-  }
-
-  if (/\b(hello|hey|hi)\b/.test(q)) {
-    return "Hello. All interface systems are operational. What is your next instruction?";
-  }
-
-  if (q.includes("who are you") || q.includes("your name")) {
-    return "I am JARVIS, your personal assistant interface. My real AI connection has not been configured yet.";
-  }
-
-  if (q.includes("homework") || q.includes("school")) {
-    return "Certainly. Tell me the assignment, its instructions, and where you need help.";
-  }
-
-  if (q.includes("code") || q.includes("coding")) {
-    return "Coding support ready. Describe your project or paste the error you want to troubleshoot.";
-  }
-
-  if (q.includes("task") || q.includes("organize")) {
-    return "Let's organize your tasks. List what you need to finish and when each task is due.";
-  }
-
-  if (q.includes("research")) {
-    return "Research mode selected. Tell me the topic you want to investigate. Web research is not connected to this local demo.";
-  }
-
-  if (q.includes("help")) {
-    return "I can demonstrate the clock, date, profile, and local chat. Connecting a real AI model is a later step.";
-  }
-
-  return 'Command received: "' + text + '". I am in local demo mode, so I cannot answer this with a real AI model yet.';
-}
-
-$("chatform").addEventListener("submit", event => {
-  event.preventDefault();
-
-  const input = $("message");
-  const text = input.value.trim();
-  if (!text) return;
-
-  addMessage(text, "user");
-  input.value = "";
-  $("statusLine").textContent = "Processing command...";
-
-  window.setTimeout(() => {
-    addMessage(respond(text));
-    $("statusLine").textContent = "Awaiting next instruction.";
-    logEvent("Command processed in demo mode.");
-  }, 200);
+document.querySelectorAll("[data-action]").forEach(button => {
+  button.addEventListener("click", () => {
+    const action = button.dataset.action;
+    if (action === "chat") {
+      $("chatInput").focus();
+      $("chatPanel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    } else if (action === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (action === "tasks") {
+      addMessage("JARVIS", "The tasks feature has not been built yet.");
+    } else if (action === "settings") {
+      addMessage("JARVIS", "Voice can be switched on or off with the Voice button. More settings can be added later.");
+    }
+  });
 });
 
-function setMessage(text) {
-  $("message").value = text;
-  $("message").focus();
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+  recognition = new SpeechRecognition();
+  recognition.lang = "en-US";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  recognition.onstart = () => {
+    isListening = true;
+    $("listenButton").textContent = "🎙 Listening...";
+    $("hero").classList.add("listening");
+    $("heroStatus").textContent = "LISTENING...";
+    $("voiceStatus").textContent = "Listening. Speak now.";
+    log("Microphone listening.");
+  };
+
+  recognition.onresult = event => {
+    const transcript = event.results[0][0].transcript;
+    $("chatInput").value = transcript;
+    $("voiceStatus").textContent = "Heard: " + transcript;
+    sendQuestion(transcript);
+  };
+
+  recognition.onerror = event => {
+    $("voiceStatus").textContent =
+      "Microphone issue: " + event.error +
+      ". Check site microphone permissions or type your message.";
+    log("Voice input issue.");
+  };
+
+  recognition.onend = () => {
+    isListening = false;
+    $("listenButton").textContent = "🎙 Listen";
+    $("hero").classList.remove("listening");
+    $("heroStatus").textContent = "PERSONAL SYSTEM ONLINE";
+  };
+} else {
+  $("listenButton").disabled = true;
+  $("listenButton").textContent = "🎙 Voice input unavailable";
+  $("voiceStatus").textContent =
+    "This browser does not support speech recognition. You can still type and hear spoken replies.";
 }
 
-function showTime() {
-  addMessage("Local time: " + new Date().toLocaleTimeString());
-}
-
-function showDate() {
-  addMessage("Local date: " + new Date().toLocaleDateString());
-}
-
-function clearChat() {
-  $("chatlog").replaceChildren();
-  addMessage("Chat cleared. Standing by.");
-}
-
-function voiceInput() {
-  const Recognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  if (!Recognition) {
-    addMessage("Voice input is not supported here. Please type your command.");
+$("listenButton").addEventListener("click", () => {
+  if (!recognition) {
+    $("voiceStatus").textContent =
+      "Voice input is not supported in this browser. Try a supported browser or type instead.";
     return;
   }
 
-  const recognition = new Recognition();
-  recognition.lang = "en-US";
-
-  recognition.onresult = event => {
-    setMessage(event.results[0][0].transcript);
-  };
-
-  recognition.onerror = () => {
-    addMessage("Voice input failed. Check microphone permissions or type instead.");
-  };
+  if (isListening) {
+    recognition.stop();
+    return;
+  }
 
   try {
     recognition.start();
   } catch {
-    addMessage("Voice input could not start. Try again or type your command.");
+    $("voiceStatus").textContent =
+      "Could not start listening. Try again in a moment.";
   }
+});
+
+if (!("speechSynthesis" in window)) {
+  $("speakToggle").disabled = true;
+  $("testVoice").disabled = true;
+  $("speakAnswer").disabled = true;
+  $("voiceStatus").textContent =
+    "Spoken output is not supported in this browser.";
 }
 
-$("voiceButton").addEventListener("click", voiceInput);
-$("chatVoiceButton").addEventListener("click", voiceInput);
-$("timeButton").addEventListener("click", showTime);
-$("dateButton").addEventListener("click", showDate);
-$("clearButton").addEventListener("click", clearChat);
-
-document.querySelectorAll("[data-prompt]").forEach(button => {
-  button.addEventListener("click", () => {
-    setMessage(button.dataset.prompt);
-  });
-});
-
-document.querySelectorAll(".navbtn[data-page]").forEach(button => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll(".navbtn[data-page]").forEach(item => {
-      item.classList.remove("active");
-    });
-
-    button.classList.add("active");
-
-    const page = button.dataset.page;
-    $("statusLine").textContent = page + " module selected.";
-    logEvent(page + " module selected.");
-
-    if (page !== "Home" && page !== "Chat") {
-      addMessage(
-        page + " module selected. This section is a visual placeholder for a future feature."
-      );
-    }
-
-    if (page === "Chat") $("message").focus();
-  });
-});
-
-loadProfile();
+log("System initialized. AI connection not configured.");
 </script>
 </body>
 </html>
