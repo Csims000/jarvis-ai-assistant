@@ -3,287 +3,156 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>J.A.R.V.I.S. | Personal Assistant</title>
-
 <style>
 :root {
-  --bg: #050b14;
-  --panel: rgba(10, 24, 42, .94);
-  --line: #164768;
-  --cyan: #35e6ff;
-  --blue: #4387ff;
-  --text: #e7f8ff;
-  --muted: #82a9bd;
+  --bg:#050b14; --panel:#0a182a; --line:#164768;
+  --cyan:#35e6ff; --blue:#4387ff; --text:#e7f8ff;
+  --muted:#82a9bd;
 }
-* { box-sizing: border-box; }
+* { box-sizing:border-box; }
 body {
-  margin: 0;
-  min-height: 100vh;
-  background:
-    radial-gradient(ellipse at 50% 35%, #102d49 0%, transparent 55%),
-    var(--bg);
-  color: var(--text);
-  font-family: Arial, sans-serif;
+  margin:0; min-height:100vh; background:
+  radial-gradient(ellipse at 50% 30%,#102d49 0%,transparent 55%),var(--bg);
+  color:var(--text); font-family:Arial,sans-serif;
 }
-button, input { font: inherit; }
+button,input { font:inherit; }
 button {
-  cursor: pointer;
-  color: var(--text);
-  background: #102a41;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 10px 13px;
-  transition: .2s;
+  cursor:pointer; color:var(--text); background:#102a41;
+  border:1px solid var(--line); border-radius:10px;
+  padding:10px 13px; transition:.2s;
 }
-button:hover {
-  border-color: var(--cyan);
-  background: #153b55;
+button:hover { border-color:var(--cyan); background:#153b55; }
+button:disabled { opacity:.5; cursor:not-allowed; }
+input {
+  width:100%; min-width:0; padding:11px; color:var(--text);
+  background:#071421; border:1px solid var(--line); border-radius:9px;
 }
-button:focus-visible, input:focus-visible {
-  outline: 2px solid var(--cyan);
-  outline-offset: 2px;
+button:focus-visible,input:focus-visible {
+  outline:2px solid var(--cyan); outline-offset:2px;
 }
 .topbar {
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 22px;
-  border-bottom: 1px solid var(--line);
-  background: rgba(3, 10, 19, .92);
+  min-height:70px; display:flex; align-items:center;
+  justify-content:space-between; gap:12px; padding:10px 20px;
+  border-bottom:1px solid var(--line); background:#030a13;
 }
-.brand {
-  font-size: 21px;
-  font-weight: 800;
-  letter-spacing: 3px;
-  color: var(--cyan);
-}
-.brand small {
-  display: block;
-  font-size: 9px;
-  letter-spacing: 4px;
-  color: var(--muted);
-  margin-top: 4px;
-}
-.clock { text-align: right; font-size: 17px; }
-.clock small { display: block; color: var(--muted); font-size: 11px; margin-top: 4px; }
+.brand { font-size:21px; font-weight:800; letter-spacing:3px; color:var(--cyan); }
+.brand small { display:block; font-size:9px; letter-spacing:4px; color:var(--muted); margin-top:4px; }
+.clock { text-align:right; font-size:16px; }
+.clock small { display:block; color:var(--muted); font-size:11px; margin-top:4px; }
 .layout {
-  max-width: 1800px;
-  margin: auto;
-  padding: 12px;
-  display: grid;
-  grid-template-columns: 200px minmax(250px, 1fr) minmax(290px, 350px);
-  gap: 12px;
-  min-height: calc(100vh - 70px);
+  max-width:1800px; margin:auto; padding:12px; display:grid;
+  grid-template-columns:200px minmax(250px,1fr) minmax(290px,350px);
+  gap:12px; min-height:calc(100vh - 70px);
 }
 .panel {
-  min-width: 0;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 15px;
-  padding: 15px;
-  box-shadow: 0 0 22px #03101c;
+  min-width:0; background:rgba(10,24,42,.95); border:1px solid var(--line);
+  border-radius:15px; padding:15px; box-shadow:0 0 22px #03101c;
 }
 .section-title {
-  color: var(--cyan);
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin: 0 0 13px;
+  color:var(--cyan); font-size:11px; letter-spacing:2px;
+  text-transform:uppercase; margin:0 0 13px;
 }
-.sidebar, .right {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.nav-buttons { display: grid; gap: 7px; }
-.nav-buttons button { text-align: left; }
-.profile { text-align: center; }
+.sidebar,.right { display:flex; flex-direction:column; gap:12px; }
+.nav-buttons { display:grid; gap:7px; }
+.nav-buttons button { text-align:left; }
+.profile { text-align:center; }
 .avatar {
-  width: 62px;
-  height: 62px;
-  border: 2px solid var(--cyan);
-  border-radius: 50%;
-  margin: 0 auto 10px;
-  display: grid;
-  place-items: center;
-  font-size: 27px;
-  overflow: hidden;
-  background: #102a41;
+  width:62px; height:62px; border:2px solid var(--cyan);
+  border-radius:50%; margin:0 auto 10px; display:grid;
+  place-items:center; font-size:27px; overflow:hidden; background:#102a41;
 }
-.avatar img { width: 100%; height: 100%; object-fit: cover; }
-.profile-name { font-weight: bold; margin-bottom: 8px; }
-.small-note { color: var(--muted); font-size: 11px; line-height: 1.5; }
-.profile input { width: 100%; margin: 6px 0; }
-input {
-  min-width: 0;
-  width: 100%;
-  color: var(--text);
-  background: #071421;
-  border: 1px solid var(--line);
-  border-radius: 9px;
-  padding: 11px;
-}
-.center {
-  display: grid;
-  grid-template-rows: minmax(210px, 1fr) auto auto;
-  gap: 12px;
-}
+.avatar img { width:100%; height:100%; object-fit:cover; }
+.profile-name { font-weight:bold; margin-bottom:8px; overflow-wrap:anywhere; }
+.profile input { margin:6px 0; }
+.small-note { color:var(--muted); font-size:11px; line-height:1.5; }
+.center { display:grid; grid-template-rows:auto auto auto; gap:12px; min-width:0; }
 .hero {
-  min-height: 250px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  overflow: hidden;
-  position: relative;
+  min-height:250px; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; text-align:center; overflow:hidden; position:relative;
+}
+.hero::before,.hero::after {
+  content:""; position:absolute; border-radius:50%; pointer-events:none;
 }
 .hero::before {
-  content: "";
-  position: absolute;
-  width: 320px;
-  height: 320px;
-  border: 1px solid #164768;
-  border-radius: 50%;
-  box-shadow: 0 0 35px #06415c, inset 0 0 35px #06415c;
-  animation: rotate 18s linear infinite;
+  width:290px; height:290px; border:1px solid #164768;
+  box-shadow:0 0 35px #06415c,inset 0 0 35px #06415c;
+  animation:rotate 18s linear infinite;
 }
 .hero::after {
-  content: "";
-  position: absolute;
-  width: 235px;
-  height: 235px;
-  border: 1px dashed var(--cyan);
-  border-radius: 50%;
-  animation: rotate 12s linear infinite reverse;
+  width:220px; height:220px; border:1px dashed var(--cyan);
+  animation:rotate 12s linear infinite reverse;
 }
 .orb {
-  z-index: 1;
-  width: 145px;
-  height: 145px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #c7fbff, #39dafa 20%, #1677c5 48%, #07152d 73%);
-  box-shadow: 0 0 35px #14bde9, 0 0 80px #075a9c;
-  animation: pulse 3s ease-in-out infinite;
+  z-index:1; width:125px; height:125px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#c7fbff,#39dafa 20%,#1677c5 48%,#07152d 73%);
+  box-shadow:0 0 35px #14bde9,0 0 80px #075a9c;
+  animation:pulse 3s ease-in-out infinite;
 }
-.hero h1 {
-  z-index: 2;
-  margin: 15px 0 4px;
-  font-size: 20px;
-  letter-spacing: 4px;
-  color: var(--cyan);
-}
-.hero p { z-index: 2; margin: 0; font-size: 12px; color: var(--muted); }
-.hero.listening .orb {
-  box-shadow: 0 0 55px #35e6ff, 0 0 100px #4387ff;
-  animation-duration: .8s;
-}
-@keyframes rotate { to { transform: rotate(360deg); } }
-@keyframes pulse { 50% { transform: scale(1.06); } }
-.status-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.status { color: #6fffc0; font-size: 12px; }
-.tools { display: flex; gap: 8px; flex-wrap: wrap; }
-.tools button { flex: 1; }
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-.info-card {
-  background: #071522;
-  border: 1px solid var(--line);
-  border-radius: 11px;
-  padding: 12px;
-}
-.info-card small { color: var(--muted); display: block; font-size: 10px; }
-.info-card strong { display: block; margin-top: 8px; font-size: 13px; }
-.chat-panel {
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
+.hero h1 { z-index:2; margin:15px 0 4px; font-size:20px; letter-spacing:4px; color:var(--cyan); }
+.hero p { z-index:2; margin:0; font-size:12px; color:var(--muted); }
+.hero.listening .orb { box-shadow:0 0 55px var(--cyan),0 0 100px var(--blue); animation-duration:.8s; }
+@keyframes rotate { to { transform:rotate(360deg); } }
+@keyframes pulse { 50% { transform:scale(1.06); } }
+.status-row { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+.status { color:#6fffc0; font-size:12px; }
+.tools,.voice-tools { display:flex; gap:8px; flex-wrap:wrap; }
+.tools button,.voice-tools button { flex:1; }
+.info-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+.info-card { background:#071522; border:1px solid var(--line); border-radius:11px; padding:12px; min-width:0; }
+.info-card small { color:var(--muted); display:block; font-size:10px; }
+.info-card strong { display:block; margin-top:8px; font-size:13px; overflow-wrap:anywhere; }
+.chat-panel { min-height:400px; display:flex; flex-direction:column; }
 .chatlog {
-  flex: 1;
-  min-height: 180px;
-  max-height: calc(100vh - 310px);
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 4px 2px 12px;
+  flex:1; min-height:180px; max-height:calc(100vh - 300px); overflow-y:auto;
+  display:flex; flex-direction:column; gap:10px; padding:4px 2px 12px;
 }
 .message {
-  padding: 11px;
-  border: 1px solid var(--line);
-  border-radius: 11px;
-  background: #081724;
-  font-size: 13px;
-  line-height: 1.5;
-  overflow-wrap: anywhere;
+  padding:11px; border:1px solid var(--line); border-radius:11px;
+  background:#081724; font-size:13px; line-height:1.5; overflow-wrap:anywhere;
 }
-.message.user { border-color: #2363a3; background: #0b2037; }
-.message b { display: block; color: var(--cyan); font-size: 10px; margin-bottom: 5px; }
-.message p { margin: 0; white-space: pre-wrap; }
-.chat-input { display: flex; gap: 7px; margin-top: 9px; }
-.chat-input input { flex: 1; }
-.chat-input button { padding: 10px; }
-.voice-tools { display: flex; gap: 7px; margin-top: 8px; }
-.voice-tools button { flex: 1; font-size: 12px; }
-.logline { font-size: 11px; color: var(--muted); margin: 6px 0; }
-footer {
-  text-align: center;
-  padding: 10px;
-  color: var(--muted);
-  font-size: 10px;
+.message.user { border-color:#2363a3; background:#0b2037; }
+.message b { display:block; color:var(--cyan); font-size:10px; margin-bottom:5px; }
+.message p { margin:0; white-space:pre-wrap; }
+.chat-input { display:flex; gap:7px; margin-top:9px; }
+.chat-input input { flex:1; }
+.voice-tools { margin-top:8px; }
+.voice-tools button { font-size:12px; }
+.logline { font-size:11px; color:var(--muted); margin:6px 0; overflow-wrap:anywhere; }
+footer { text-align:center; padding:10px; color:var(--muted); font-size:10px; }
+#settingsPanel {
+  display:none; position:fixed; z-index:1000; top:75px; right:16px;
+  width:min(350px,calc(100vw - 32px)); padding:20px;
+  color:var(--text); background:#091725; border:1px solid var(--cyan);
+  border-radius:16px; box-shadow:0 0 25px #00cfff33;
 }
-@media (min-width: 1001px) {
-  body { overflow: hidden; }
-  .layout { height: calc(100vh - 70px); min-height: 0; }
-  .sidebar, .right { overflow-y: auto; }
-  .center { min-height: 0; overflow-y: auto; }
+#settingsPanel.open { display:block; }
+#settingsPanel label { display:block; margin:14px 0 6px; color:#8feeff; font-size:13px; }
+#settingsPanel button { margin-top:12px; }
+@media(max-width:1000px) {
+  .layout { grid-template-columns:170px minmax(0,1fr); }
+  .right { grid-column:1/-1; }
+  .chatlog { max-height:350px; }
 }
-@media (max-height: 720px) and (min-width: 1001px) {
-  .panel { padding: 10px; }
-  .hero { min-height: 185px; }
-  .hero::before { width: 230px; height: 230px; }
-  .hero::after { width: 175px; height: 175px; }
-  .orb { width: 105px; height: 105px; }
-  .chatlog { max-height: calc(100vh - 260px); }
-}
-@media (max-width: 1000px) {
-  .layout { grid-template-columns: 170px minmax(0, 1fr); }
-  .right { grid-column: 1 / -1; }
-  .chatlog { max-height: 350px; }
-}
-@media (max-width: 620px) {
-  .topbar { padding: 0 12px; height: 62px; }
-  .brand { font-size: 16px; }
-  .clock { font-size: 14px; }
-  .layout { display: flex; flex-direction: column; padding: 8px; }
-  .sidebar { display: grid; grid-template-columns: 1fr 1fr; }
-  .hero { min-height: 240px; }
-  .info-grid { grid-template-columns: 1fr; }
-  .chatlog { max-height: 45vh; }
-  .chat-input { flex-wrap: wrap; }
+@media(max-width:620px) {
+  .topbar { padding:10px 12px; }
+  .brand { font-size:16px; }
+  .clock { font-size:13px; }
+  .layout { display:flex; flex-direction:column; padding:8px; }
+  .sidebar { display:grid; grid-template-columns:1fr 1fr; }
+  .hero { min-height:230px; }
+  .info-grid { grid-template-columns:1fr; }
+  .chatlog { max-height:45vh; }
 }
 </style>
 </head>
-
 <body>
+
 <header class="topbar">
   <div class="brand">J.A.R.V.I.S.<small>PERSONAL ASSISTANT</small></div>
-  <div class="clock">
-    <span id="clock">--:--:--</span>
-    <small id="date">Loading date...</small>
-  </div>
+  <div class="clock"><span id="clock">--:--:--</span><small id="date">Loading...</small></div>
+  <button id="settingsButton" type="button">⚙ Settings</button>
 </header>
 
 <div class="layout">
@@ -302,13 +171,13 @@ footer {
       <h2 class="section-title">Your profile</h2>
       <div class="avatar" id="avatar">🤖</div>
       <div class="profile-name" id="profileName">Commander</div>
-      <input id="nameInput" maxlength="30" placeholder="Your username">
+      <input id="nameInput" maxlength="30" placeholder="Your username" aria-label="Your username">
       <button id="saveName" style="width:100%">Save username</button>
       <label class="small-note" style="display:block;margin-top:12px">
         Choose profile picture
         <input type="file" id="photoInput" accept="image/*">
       </label>
-      <p class="small-note">Profile settings are saved in this browser only.</p>
+      <p class="small-note">Profile settings are saved in this browser.</p>
     </section>
 
     <section class="panel">
@@ -321,7 +190,7 @@ footer {
     </section>
   </aside>
 
-  <main class="center">
+  <main class="center" id="homePanel">
     <section class="panel hero" id="hero">
       <div class="orb"></div>
       <h1>J.A.R.V.I.S.</h1>
@@ -333,53 +202,35 @@ footer {
         <span class="section-title" style="margin:0">Voice controls</span>
         <span class="status" id="systemStatus">● READY</span>
       </div>
-      <p class="small-note">
-        Speak to enter a question, or type it below. Use Speak answer to hear JARVIS.
-      </p>
+      <p class="small-note">Ask a question by typing or using Listen. JARVIS can read answers aloud using your browser voice.</p>
       <div class="tools">
         <button id="listenButton">🎙 Listen</button>
         <button id="speakToggle">🔊 Voice: ON</button>
         <button id="testVoice">▶ Test voice</button>
       </div>
-      <p class="small-note" id="voiceStatus" aria-live="polite">
-        Voice features depend on your browser permissions and support.
-      </p>
+      <p class="small-note" id="voiceStatus" aria-live="polite">Voice features depend on browser permissions and support.</p>
     </section>
 
     <section class="panel">
       <h2 class="section-title">System overview</h2>
       <div class="info-grid">
-        <div class="info-card">
-          <small>ASSISTANT</small>
-          <strong>JARVIS</strong>
-        </div>
-        <div class="info-card">
-          <small>VOICE OUTPUT</small>
-          <strong id="voiceState">Enabled</strong>
-        </div>
-        <div class="info-card">
-          <small>AI CONNECTION</small>
-          <strong>Not connected</strong>
-        </div>
+        <div class="info-card"><small>ASSISTANT</small><strong>JARVIS</strong></div>
+        <div class="info-card"><small>VOICE OUTPUT</small><strong id="voiceState">Enabled</strong></div>
+        <div class="info-card"><small>AI CONNECTION</small><strong id="aiState">Checking when used</strong></div>
       </div>
-      <p class="small-note">
-        This version does not connect to a real AI model yet. Its demo replies are not answers from ChatGPT.
-      </p>
+      <p class="small-note">JARVIS sends your messages to your Cloudflare Worker, which connects to OpenRouter. Your API key should remain stored as a Cloudflare secret.</p>
     </section>
   </main>
 
-  <aside class="panel chat-panel" id="chatPanel">
+  <aside class="panel chat-panel right" id="chatPanel">
     <h2 class="section-title">Talk to JARVIS</h2>
     <div class="chatlog" id="chatlog" aria-live="polite">
-      <div class="message">
-        <b>JARVIS</b>
-        <p>Hello! Voice controls are ready to test. I can demonstrate the interface, but I need an AI connection to answer general questions accurately.</p>
-      </div>
+      <div class="message"><b>JARVIS</b><p>Hello! I'm ready. Ask me a question to test the AI connection.</p></div>
     </div>
     <form id="chatForm">
       <div class="chat-input">
         <input id="chatInput" autocomplete="off" placeholder="Ask JARVIS something..." aria-label="Message to JARVIS">
-        <button type="submit">Send</button>
+        <button id="sendButton" type="submit">Send</button>
       </div>
     </form>
     <div class="voice-tools">
@@ -390,20 +241,35 @@ footer {
       <h2 class="section-title">System log</h2>
       <p class="logline" id="logline">System initialized.</p>
       <p class="logline">Speech output: browser-based</p>
-      <p class="logline">AI status: not connected</p>
+      <p class="logline" id="aiLog">AI status: not tested yet</p>
     </section>
   </aside>
 </div>
 
+<section id="settingsPanel" aria-label="JARVIS settings">
+  <h2 style="margin-top:0">JARVIS Settings</h2>
+  <p>AI provider: <strong>OpenRouter</strong></p>
+  <label for="modelInput">OpenRouter model ID</label>
+  <input id="modelInput" value="openrouter/free" placeholder="For example: openrouter/free">
+  <p class="small-note">Choose a model ID available in your OpenRouter account. Your API key is kept on Cloudflare and is not entered here.</p>
+  <p id="settingsStatus" class="small-note" aria-live="polite">Model setting is saved in this browser.</p>
+  <button id="saveModel" type="button">Save model preference</button>
+  <button id="closeSettings" type="button">Close</button>
+</section>
+
 <footer>J.A.R.V.I.S. PERSONAL INTERFACE · BROWSER VOICE MODE</footer>
 
 <script>
+"use strict";
+
 const $ = id => document.getElementById(id);
+const WORKER_URL = "https://soft-heart-d641.caiden-sims.workers.dev/";
 
 let voiceEnabled = true;
 let lastAnswer = "";
 let recognition = null;
 let isListening = false;
+let isSending = false;
 
 function log(message) {
   $("logline").textContent = message;
@@ -413,7 +279,7 @@ function updateClock() {
   const now = new Date();
   $("clock").textContent = now.toLocaleTimeString();
   $("date").textContent = now.toLocaleDateString(undefined, {
-    weekday: "short", month: "short", day: "numeric", year: "numeric"
+    weekday:"short", month:"short", day:"numeric", year:"numeric"
   });
 }
 updateClock();
@@ -422,13 +288,10 @@ setInterval(updateClock, 1000);
 function addMessage(sender, text, isUser = false) {
   const box = document.createElement("div");
   box.className = "message" + (isUser ? " user" : "");
-
   const label = document.createElement("b");
   label.textContent = sender;
-
   const paragraph = document.createElement("p");
   paragraph.textContent = text;
-
   box.append(label, paragraph);
   $("chatlog").appendChild(box);
   $("chatlog").scrollTop = $("chatlog").scrollHeight;
@@ -436,75 +299,106 @@ function addMessage(sender, text, isUser = false) {
 
 function speak(text) {
   if (!voiceEnabled || !("speechSynthesis" in window)) {
-    $("voiceStatus").textContent =
-      "Speech output is unavailable or switched off.";
+    $("voiceStatus").textContent = "Speech output is unavailable or switched off.";
     return;
   }
-
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "en-US";
   utterance.rate = 1;
   utterance.pitch = 1;
-
   utterance.onstart = () => {
     $("voiceStatus").textContent = "JARVIS is speaking...";
     log("Voice output active.");
   };
   utterance.onend = () => {
     $("voiceStatus").textContent = "Ready for your next question.";
-    log("Voice output finished.");
   };
   utterance.onerror = () => {
-    $("voiceStatus").textContent =
-      "Voice playback failed. Try again or check browser audio.";
+    $("voiceStatus").textContent = "Voice playback failed. Check browser audio.";
   };
-
   window.speechSynthesis.speak(utterance);
 }
 
-function demoReply(question) {
-  const q = question.toLowerCase().trim();
-
-  if (/^(hi|hello|hey)\b/.test(q)) {
-    return "Hello! I'm ready to help test your JARVIS interface. My general AI connection has not been set up yet.";
-  }
-  if (q.includes("your name") || q.includes("who are you")) {
-    return "I'm JARVIS, your personal assistant interface. I can use your browser's voice features, but I am not connected to a real AI model yet.";
-  }
-  if (q.includes("time")) {
-    return "The current time on this device is " + new Date().toLocaleTimeString() + ".";
-  }
-  if (q.includes("date") || q.includes("today")) {
-    return "The date on this device is " + new Date().toLocaleDateString() + ".";
-  }
-  if (q.includes("voice") || q.includes("speak")) {
-    return "You can use the Listen button to dictate a message, then use Speak answer to hear my reply. General AI answers still need an AI connection.";
-  }
-  if (q.includes("help")) {
-    return "You can type a message, press Listen to dictate one, use Voice to switch spoken replies on or off, or press Test voice to check audio. To answer general questions, I need an AI service connected.";
-  }
-  return "I received your question: \"" + question + "\". This is a demo reply, not an AI-generated answer. The next step is connecting JARVIS to an AI service that can answer general questions.";
-}
-
-function sendQuestion(question) {
+async function sendQuestion(question) {
   const clean = question.trim();
-  if (!clean) return;
+  if (!clean || isSending) return;
 
   addMessage("YOU", clean, true);
   $("chatInput").value = "";
-  $("systemStatus").textContent = "● PROCESSING";
-  $("heroStatus").textContent = "PROCESSING REQUEST...";
+  isSending = true;
+  $("chatInput").disabled = true;
+  $("sendButton").disabled = true;
+  $("systemStatus").textContent = "● CONNECTING";
+  $("heroStatus").textContent = "JARVIS IS THINKING...";
+  $("aiState").textContent = "Connecting...";
+  $("aiLog").textContent = "AI status: request in progress";
 
-  const answer = demoReply(clean);
-  lastAnswer = answer;
+  try {
+    const model = (() => {
+      try {
+        return localStorage.getItem("jarvis_openrouter_model") || "openrouter/free";
+      } catch {
+        return "openrouter/free";
+      }
+    })();
 
-  addMessage("JARVIS", answer);
-  $("systemStatus").textContent = "● READY";
-  $("heroStatus").textContent = "PERSONAL SYSTEM ONLINE";
-  log("Received a new message.");
+    // Include the current message and recent conversation for context.
+    const history = Array.from(
+      $("chatlog").querySelectorAll(".message")
+    ).map(box => ({
+      role: box.classList.contains("user") ? "user" : "assistant",
+      content: box.querySelector("p")?.textContent || ""
+    })).filter(item => item.content.trim());
 
-  if (voiceEnabled) speak(answer);
+    const response = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model,
+        messages: history.slice(-20)
+      })
+    });
+
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error("The Worker returned a response that wasn't valid JSON.");
+    }
+
+    if (!response.ok) {
+      throw new Error(data.error || ("Request failed with HTTP " + response.status));
+    }
+
+    if (typeof data.reply !== "string" || !data.reply.trim()) {
+      throw new Error(data.error || "No reply received. Check your Cloudflare Worker code.");
+    }
+
+    lastAnswer = data.reply.trim();
+    addMessage("JARVIS", lastAnswer);
+    $("systemStatus").textContent = "● AI CONNECTED";
+    $("aiState").textContent = "Connected";
+    $("aiLog").textContent = "AI status: reply received";
+    log("AI response received successfully.");
+
+    if (voiceEnabled) speak(lastAnswer);
+  } catch (error) {
+    const details = error && error.message ? error.message : "Unknown connection error";
+    lastAnswer = "I couldn't get an AI response. " + details +
+      " Check the Cloudflare Worker URL, its secret, and the selected model.";
+    addMessage("JARVIS", lastAnswer);
+    $("systemStatus").textContent = "● CONNECTION ERROR";
+    $("aiState").textContent = "Connection error";
+    $("aiLog").textContent = "AI status: request failed";
+    log("AI request failed: " + details);
+  } finally {
+    isSending = false;
+    $("chatInput").disabled = false;
+    $("sendButton").disabled = false;
+    $("heroStatus").textContent = "PERSONAL SYSTEM ONLINE";
+    $("chatInput").focus();
+  }
 }
 
 $("chatForm").addEventListener("submit", event => {
@@ -532,24 +426,18 @@ $("speakToggle").addEventListener("click", () => {
   voiceEnabled = !voiceEnabled;
   $("speakToggle").textContent = voiceEnabled ? "🔊 Voice: ON" : "🔇 Voice: OFF";
   $("voiceState").textContent = voiceEnabled ? "Enabled" : "Muted";
-  if (!voiceEnabled && "speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-  }
-  $("voiceStatus").textContent = voiceEnabled
-    ? "Spoken replies are enabled."
-    : "Spoken replies are disabled.";
+  if (!voiceEnabled && "speechSynthesis" in window) window.speechSynthesis.cancel();
+  $("voiceStatus").textContent = voiceEnabled ? "Spoken replies are enabled." : "Spoken replies are disabled.";
 });
 
 $("testVoice").addEventListener("click", () => {
   voiceEnabled = true;
   $("speakToggle").textContent = "🔊 Voice: ON";
   $("voiceState").textContent = "Enabled";
-  speak("Hello. I am JARVIS. My voice system is working.");
+  speak("Hello. I am JARVIS. My browser voice system is working.");
 });
 
-$("focusChat").addEventListener("click", () => {
-  $("chatInput").focus();
-});
+$("focusChat").addEventListener("click", () => $("chatInput").focus());
 
 $("clearChat").addEventListener("click", () => {
   $("chatlog").replaceChildren();
@@ -568,9 +456,6 @@ $("saveName").addEventListener("click", () => {
   log("Profile name saved in this browser.");
 });
 
-const savedPhoto = localStorage.getItem("jarvisPhoto");
-if (savedPhoto) showPhoto(savedPhoto);
-
 function showPhoto(src) {
   const img = document.createElement("img");
   img.alt = "Profile picture";
@@ -578,20 +463,22 @@ function showPhoto(src) {
   $("avatar").replaceChildren(img);
 }
 
+try {
+  const savedPhoto = localStorage.getItem("jarvisPhoto");
+  if (savedPhoto) showPhoto(savedPhoto);
+} catch {}
+
 $("photoInput").addEventListener("change", event => {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
-
   if (!file.type.startsWith("image/")) {
     $("voiceStatus").textContent = "Please choose an image file.";
     return;
   }
   if (file.size > 500000) {
-    $("voiceStatus").textContent =
-      "Please choose an image smaller than 500 KB.";
+    $("voiceStatus").textContent = "Please choose an image smaller than 500 KB.";
     return;
   }
-
   const reader = new FileReader();
   reader.onload = () => {
     try {
@@ -599,11 +486,43 @@ $("photoInput").addEventListener("change", event => {
       showPhoto(reader.result);
       log("Profile picture saved in this browser.");
     } catch {
-      $("voiceStatus").textContent =
-        "The image could not be saved. Try a smaller image.";
+      $("voiceStatus").textContent = "Could not save the image. Try a smaller one.";
     }
   };
   reader.readAsDataURL(file);
+});
+
+function openSettings() {
+  $("settingsPanel").classList.add("open");
+  $("settingsButton").setAttribute("aria-expanded", "true");
+}
+function closeSettings() {
+  $("settingsPanel").classList.remove("open");
+  $("settingsButton").setAttribute("aria-expanded", "false");
+}
+$("settingsButton").addEventListener("click", () => {
+  if ($("settingsPanel").classList.contains("open")) closeSettings();
+  else openSettings();
+});
+$("closeSettings").addEventListener("click", closeSettings);
+
+try {
+  $("modelInput").value = localStorage.getItem("jarvis_openrouter_model") || "openrouter/free";
+} catch {}
+
+$("saveModel").addEventListener("click", () => {
+  const model = $("modelInput").value.trim();
+  if (!model) {
+    $("settingsStatus").textContent = "Please enter a model ID.";
+    return;
+  }
+  try {
+    localStorage.setItem("jarvis_openrouter_model", model);
+    $("settingsStatus").textContent = "Model preference saved in this browser. Your API key stays in Cloudflare.";
+    log("AI model preference saved.");
+  } catch {
+    $("settingsStatus").textContent = "Could not save the setting in this browser.";
+  }
 });
 
 document.querySelectorAll("[data-action]").forEach(button => {
@@ -611,20 +530,18 @@ document.querySelectorAll("[data-action]").forEach(button => {
     const action = button.dataset.action;
     if (action === "chat") {
       $("chatInput").focus();
-      $("chatPanel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+      $("chatPanel").scrollIntoView({ behavior:"smooth", block:"nearest" });
     } else if (action === "home") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top:0, behavior:"smooth" });
     } else if (action === "tasks") {
       addMessage("JARVIS", "The tasks feature has not been built yet.");
     } else if (action === "settings") {
-      addMessage("JARVIS", "Voice can be switched on or off with the Voice button. More settings can be added later.");
+      openSettings();
     }
   });
 });
 
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
-
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 if (SpeechRecognition) {
   recognition = new SpeechRecognition();
   recognition.lang = "en-US";
@@ -639,51 +556,39 @@ if (SpeechRecognition) {
     $("voiceStatus").textContent = "Listening. Speak now.";
     log("Microphone listening.");
   };
-
   recognition.onresult = event => {
     const transcript = event.results[0][0].transcript;
     $("chatInput").value = transcript;
     $("voiceStatus").textContent = "Heard: " + transcript;
     sendQuestion(transcript);
   };
-
   recognition.onerror = event => {
-    $("voiceStatus").textContent =
-      "Microphone issue: " + event.error +
+    $("voiceStatus").textContent = "Microphone issue: " + event.error +
       ". Check site microphone permissions or type your message.";
     log("Voice input issue.");
   };
-
   recognition.onend = () => {
     isListening = false;
     $("listenButton").textContent = "🎙 Listen";
     $("hero").classList.remove("listening");
-    $("heroStatus").textContent = "PERSONAL SYSTEM ONLINE";
+    if (!isSending) $("heroStatus").textContent = "PERSONAL SYSTEM ONLINE";
   };
 } else {
   $("listenButton").disabled = true;
   $("listenButton").textContent = "🎙 Voice input unavailable";
-  $("voiceStatus").textContent =
-    "This browser does not support speech recognition. You can still type and hear spoken replies.";
+  $("voiceStatus").textContent = "Speech recognition is not supported here. You can still type and hear replies.";
 }
 
 $("listenButton").addEventListener("click", () => {
-  if (!recognition) {
-    $("voiceStatus").textContent =
-      "Voice input is not supported in this browser. Try a supported browser or type instead.";
-    return;
-  }
-
+  if (!recognition) return;
   if (isListening) {
     recognition.stop();
     return;
   }
-
   try {
     recognition.start();
   } catch {
-    $("voiceStatus").textContent =
-      "Could not start listening. Try again in a moment.";
+    $("voiceStatus").textContent = "Could not start listening. Try again in a moment.";
   }
 });
 
@@ -691,156 +596,10 @@ if (!("speechSynthesis" in window)) {
   $("speakToggle").disabled = true;
   $("testVoice").disabled = true;
   $("speakAnswer").disabled = true;
-  $("voiceStatus").textContent =
-    "Spoken output is not supported in this browser.";
+  $("voiceStatus").textContent = "Spoken output is not supported in this browser.";
 }
 
-log("System initialized. AI connection not configured.");
+log("System initialized. AI connection will be tested when you send a message.");
 </script>
-
-<!-- JARVIS SETTINGS PANEL -->
-<style>
-#jarvisSettingsButton {
-  position: fixed;
-  right: 18px;
-  top: 18px;
-  z-index: 9999;
-  background: #071c2b;
-  color: #56eaff;
-  border: 1px solid #56eaff;
-  border-radius: 12px;
-  padding: 12px 16px;
-  cursor: pointer;
-  font-size: 15px;
-}
-#jarvisSettingsPanel {
-  display: none;
-  position: fixed;
-  z-index: 10000;
-  top: 70px;
-  right: 18px;
-  width: min(350px, calc(100vw - 52px));
-  padding: 20px;
-  color: #e7faff;
-  background: #091725;
-  border: 1px solid #36dff5;
-  border-radius: 16px;
-  box-shadow: 0 0 25px #00cfff33;
-  font-family: Arial, sans-serif;
-}
-#jarvisSettingsPanel.open { display: block; }
-#jarvisSettingsPanel label {
-  display: block;
-  margin-top: 14px;
-  margin-bottom: 6px;
-  color: #8feeff;
-}
-#jarvisSettingsPanel input,
-#jarvisSettingsPanel select {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 10px;
-  color: white;
-  background: #10283a;
-  border: 1px solid #35647b;
-  border-radius: 8px;
-}
-#jarvisSettingsPanel button {
-  margin-top: 14px;
-  padding: 10px;
-  border: 1px solid #56eaff;
-  border-radius: 8px;
-  color: #061521;
-  background: #56eaff;
-  cursor: pointer;
-}
-#jarvisSettingsStatus {
-  font-size: 13px;
-  line-height: 1.5;
-  color: #b9d5e2;
-}
-</style>
-
-<button id="jarvisSettingsButton" type="button"
-  aria-expanded="false" aria-controls="jarvisSettingsPanel">
-  ⚙ Settings
-</button>
-
-<section id="jarvisSettingsPanel" aria-label="JARVIS settings">
-  <h2 style="margin-top:0">JARVIS Settings</h2>
-  <p>AI provider: <strong>OpenRouter</strong></p>
-
-  <label for="jarvisModel">AI model ID</label>
-  <input id="jarvisModel"
-    value="openai/gpt-4o-mini"
-    placeholder="Enter an OpenRouter model ID">
-
-  <label for="jarvisApiKey">OpenRouter API key</label>
-  <input id="jarvisApiKey" type="password"
-    autocomplete="off"
-    placeholder="Enter your key here">
-
-  <p id="jarvisSettingsStatus">
-    Settings panel ready. The AI connection is not set up yet.
-    Do not paste your key into the source code.
-  </p>
-
-  <button id="jarvisSaveSettings" type="button">Save model preference</button>
-  <button id="jarvisCloseSettings" type="button"
-    style="background:#10283a;color:#d9f8ff">
-    Close
-  </button>
-</section>
-
-<script>
-(() => {
-  const panel = document.getElementById("jarvisSettingsPanel");
-  const toggle = document.getElementById("jarvisSettingsButton");
-  const model = document.getElementById("jarvisModel");
-  const key = document.getElementById("jarvisApiKey");
-  const status = document.getElementById("jarvisSettingsStatus");
-
-  try {
-    model.value =
-      localStorage.getItem("jarvis_openrouter_model") ||
-      "openai/gpt-4o-mini";
-  } catch (error) {}
-
-  toggle.addEventListener("click", () => {
-    const isOpen = panel.classList.toggle("open");
-    toggle.setAttribute("aria-expanded", String(isOpen));
-  });
-
-  document.getElementById("jarvisCloseSettings")
-    .addEventListener("click", () => {
-      panel.classList.remove("open");
-      toggle.setAttribute("aria-expanded", "false");
-    });
-
-  document.getElementById("jarvisSaveSettings")
-    .addEventListener("click", () => {
-      const selectedModel = model.value.trim();
-
-      if (!selectedModel) {
-        status.textContent = "Please enter a model ID.";
-        return;
-      }
-
-      try {
-        localStorage.setItem("jarvis_openrouter_model", selectedModel);
-        status.textContent =
-          "Model preference saved in this browser. " +
-          "The API key has NOT been saved, and AI is not connected yet.";
-      } catch (error) {
-        status.textContent =
-          "Could not save the preference in this browser.";
-      }
-
-      key.value = "";
-    });
-})();
-</script>
-<!-- END JARVIS SETTINGS PANEL -->
-
 </body>
 </html>
