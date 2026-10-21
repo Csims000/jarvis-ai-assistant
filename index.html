@@ -697,5 +697,150 @@ if (!("speechSynthesis" in window)) {
 
 log("System initialized. AI connection not configured.");
 </script>
+
+<!-- JARVIS SETTINGS PANEL -->
+<style>
+#jarvisSettingsButton {
+  position: fixed;
+  right: 18px;
+  top: 18px;
+  z-index: 9999;
+  background: #071c2b;
+  color: #56eaff;
+  border: 1px solid #56eaff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 15px;
+}
+#jarvisSettingsPanel {
+  display: none;
+  position: fixed;
+  z-index: 10000;
+  top: 70px;
+  right: 18px;
+  width: min(350px, calc(100vw - 52px));
+  padding: 20px;
+  color: #e7faff;
+  background: #091725;
+  border: 1px solid #36dff5;
+  border-radius: 16px;
+  box-shadow: 0 0 25px #00cfff33;
+  font-family: Arial, sans-serif;
+}
+#jarvisSettingsPanel.open { display: block; }
+#jarvisSettingsPanel label {
+  display: block;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  color: #8feeff;
+}
+#jarvisSettingsPanel input,
+#jarvisSettingsPanel select {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  color: white;
+  background: #10283a;
+  border: 1px solid #35647b;
+  border-radius: 8px;
+}
+#jarvisSettingsPanel button {
+  margin-top: 14px;
+  padding: 10px;
+  border: 1px solid #56eaff;
+  border-radius: 8px;
+  color: #061521;
+  background: #56eaff;
+  cursor: pointer;
+}
+#jarvisSettingsStatus {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #b9d5e2;
+}
+</style>
+
+<button id="jarvisSettingsButton" type="button"
+  aria-expanded="false" aria-controls="jarvisSettingsPanel">
+  ⚙ Settings
+</button>
+
+<section id="jarvisSettingsPanel" aria-label="JARVIS settings">
+  <h2 style="margin-top:0">JARVIS Settings</h2>
+  <p>AI provider: <strong>OpenRouter</strong></p>
+
+  <label for="jarvisModel">AI model ID</label>
+  <input id="jarvisModel"
+    value="openai/gpt-4o-mini"
+    placeholder="Enter an OpenRouter model ID">
+
+  <label for="jarvisApiKey">OpenRouter API key</label>
+  <input id="jarvisApiKey" type="password"
+    autocomplete="off"
+    placeholder="Enter your key here">
+
+  <p id="jarvisSettingsStatus">
+    Settings panel ready. The AI connection is not set up yet.
+    Do not paste your key into the source code.
+  </p>
+
+  <button id="jarvisSaveSettings" type="button">Save model preference</button>
+  <button id="jarvisCloseSettings" type="button"
+    style="background:#10283a;color:#d9f8ff">
+    Close
+  </button>
+</section>
+
+<script>
+(() => {
+  const panel = document.getElementById("jarvisSettingsPanel");
+  const toggle = document.getElementById("jarvisSettingsButton");
+  const model = document.getElementById("jarvisModel");
+  const key = document.getElementById("jarvisApiKey");
+  const status = document.getElementById("jarvisSettingsStatus");
+
+  try {
+    model.value =
+      localStorage.getItem("jarvis_openrouter_model") ||
+      "openai/gpt-4o-mini";
+  } catch (error) {}
+
+  toggle.addEventListener("click", () => {
+    const isOpen = panel.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  document.getElementById("jarvisCloseSettings")
+    .addEventListener("click", () => {
+      panel.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+    });
+
+  document.getElementById("jarvisSaveSettings")
+    .addEventListener("click", () => {
+      const selectedModel = model.value.trim();
+
+      if (!selectedModel) {
+        status.textContent = "Please enter a model ID.";
+        return;
+      }
+
+      try {
+        localStorage.setItem("jarvis_openrouter_model", selectedModel);
+        status.textContent =
+          "Model preference saved in this browser. " +
+          "The API key has NOT been saved, and AI is not connected yet.";
+      } catch (error) {
+        status.textContent =
+          "Could not save the preference in this browser.";
+      }
+
+      key.value = "";
+    });
+})();
+</script>
+<!-- END JARVIS SETTINGS PANEL -->
+
 </body>
 </html>
